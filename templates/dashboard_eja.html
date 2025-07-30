@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    {% include 'header.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card-summary {
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        .bg-aprovado { background: linear-gradient(135deg, #28a745, #218838); }
+        .bg-reprovado { background: linear-gradient(135deg, #dc3545, #bd2130); }
+        .bg-concluinte { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .bg-total { background: linear-gradient(135deg, #6c757d, #495057); }
+        .chart-container {
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        h1, h4 { font-weight: bold; }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    {% include 'navbar.html' %}
+    {% include 'sidebar.html' %}
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <h1 class="m-0"><i class="fas fa-chart-bar text-primary me-2"></i> Dashboard EJA</h1>
+                <p class="text-muted">Indicadores de desempenho por status dos estudantes.</p>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Filtro por Ano -->
+                <form method="get" class="row mb-4">
+                    <div class="col-md-4">
+                        <label for="ano_exame" class="form-label fw-bold">Filtrar por Ano</label>
+                        <select name="ano_exame" id="ano_exame" class="form-control" onchange="this.form.submit()">
+                            <option value="">Todos os Anos</option>
+                            {% for ano in anos_disponiveis %}
+                                <option value="{{ ano }}" {% if ano|stringformat:"s" == ano_exame %}selected{% endif %}>{{ ano }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </form>
+
+                <!-- Cards -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card-summary bg-total">
+                            <h3>{{ total }}</h3>
+                            <p>Total de Registros</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-summary bg-aprovado">
+                            <h3>{{ percentual_aprovados }}%</h3>
+                            <p>Aprovados</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-summary bg-reprovado">
+                            <h3>{{ percentual_reprovados }}%</h3>
+                            <p>Reprovados</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-summary bg-concluinte">
+                            <h3>{{ percentual_concluintes }}%</h3>
+                            <p>Concluintes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico -->
+                <div class="chart-container">
+                    <h4>Status Geral</h4>
+                    <canvas id="graficoStatus"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% include 'footer.html' %}
+</div>
+
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+
+<script>
+    const ctx = document.getElementById('graficoStatus');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Aprovados', 'Reprovados', 'Concluintes'],
+            datasets: [{
+                label: 'Percentual (%)',
+                data: [{{ percentual_aprovados }}, {{ percentual_reprovados }}, {{ percentual_concluintes }}],
+                backgroundColor: ['#28a745', '#dc3545', '#007bff']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: 'Distribuição dos Status'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Percentual'
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

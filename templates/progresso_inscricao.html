@@ -1,0 +1,22 @@
+{% load static %}
+<h2>Status da Inscrição</h2>
+<p>Nome: {{ candidato.nome }}</p>
+<p>Status: {{ candidato.status }}</p>
+<!-- Adicione mais detalhes conforme necessidade -->
+<h4 class="mt-4 text-success">Disciplinas Aprovadas</h4>
+<ul>
+  {% for nome, nota in disciplinas_aprovadas.items %}
+    <li>{{ nome }} - {{ nota }}</li>
+  {% empty %}
+    <li>Nenhuma disciplina aprovada ainda.</li>
+  {% endfor %}
+</ul>
+
+<h4 class="mt-4 text-danger">Disciplinas Pendentes</h4>
+<ul>
+  {% for nome, nota in disciplinas_pendentes.items %}
+    <li>{{ nome }}{% if nota is not None %} - {{ nota }}{% else %} - Não realizada{% endif %}</li>
+  {% empty %}
+    <li>Sem pendências.</li>
+  {% endfor %}
+</ul>

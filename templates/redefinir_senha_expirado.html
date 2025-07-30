@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Link Expirado</title>
+  <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition login-page">
+
+<div class="login-box">
+  <div class="card card-outline card-danger">
+    <div class="card-header text-center">
+      <h3><b>Link Expirado</b></h3>
+    </div>
+    <div class="card-body text-center">
+      <p class="text-danger">O link de redefinição de senha expirou ou é inválido.</p>
+      <a href="{% url 'login_candidato' %}" class="btn btn-secondary">Voltar para Login</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

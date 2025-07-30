@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório Geral de Alunos - EJA</title>
+  <style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    color: #2c3e50;
+    font-size: 12px;
+    margin: 20px 30px;
+  }
+
+  header {
+    border-bottom: 1px solid #2c3e50;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-size: 20px;
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 15px;
+    margin-top: 0;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #bbb;
+    padding-bottom: 3px;
+    color: #2c3e50;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed;
+    word-break: break-word;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 5px 6px;
+    font-size: 11px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+  }
+
+  .no-data {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
+
+  ul {
+    padding-left: 18px;
+    margin: 0;
+  }
+
+  footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 10px;
+    color: #888;
+  }
+</style>
+
+</head>
+<body>
+
+  <header>
+    <h1>Relatório Geral de Alunos - EJA</h1>
+  </header>
+
+  <section>
+    <h2>Resumo Geral</h2>
+    <p><strong>Total de Alunos:</strong> {{ total_alunos }}</p>
+    <p><strong>Distribuição por Disciplinas:</strong></p>
+    <ul>
+      {% for nome, total in disciplinas.items %}
+        <li>{{ nome }}: {{ total }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Lista de Alunos</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Escola</th>
+          <th>Ano</th>
+          <th>Disciplinas Inscritas</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for aluno in alunos %}
+        <tr>
+          <td>{{ aluno.nome }}</td>
+          <td>{{ aluno.cpf }}</td>
+          <td>{{ aluno.escola_2024 }}</td>
+          <td>{{ aluno.ano_exame }}</td>
+          <td>
+            {% if aluno.lista_disciplinas %}
+              {% for d in aluno.lista_disciplinas %}
+                {{ d }}{% if not forloop.last %}{% if forloop.counter|divisibleby:4 %}<br>{% else %}, {% endif %}{% endif %}
+              {% endfor %}
+            {% else %}
+              <span class="no-data">Não informado</span>
+            {% endif %}
+          </td>
+
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" class="no-data">Nenhum aluno encontrado com os filtros aplicados.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    Relatório gerado automaticamente - {{ data_geracao }}
+  </footer>
+
+</body>
+</html>

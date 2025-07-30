@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  footer {
+    margin-top: auto;
+  }
+</style>
+
+<main>
+  <section class="content-header mb-4">
+    <div class="container-fluid">
+
+<div class="row align-items-center justify-content-between mb-4 bg-white p-4 rounded shadow-sm border border-light">
+  <div class="col-lg-7 col-md-6 mb-3 mb-md-0">
+    <div class="d-flex align-items-center">
+      <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 56px; height: 56px;">
+        <i class="fas fa-users fa-lg"></i>
+      </div>
+      <div>
+        <h2 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">Lista de Alunos - EJA</h2>
+        <p class="text-muted mb-0" style="font-size: 0.95rem;">Acompanhe os alunos registrados no sistema educacional EJA.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5 col-md-6 text-md-end">
+
+  <div class="d-flex justify-content-md-end justify-content-start gap-2 flex-wrap">
+    <a href="#" class="btn btn-primary px-4 py-2 shadow-sm d-flex align-items-center">
+      <i class="fas fa-user-plus me-2"></i> Novo Aluno
+    </a>
+    <a href="{% url 'dashboard_eja' %}" class="btn btn-outline-secondary px-4 py-2 shadow-sm d-flex align-items-center">
+      <i class="fas fa-home me-2"></i> Início
+    </a>
+    <a href="{% url 'gerar_pdf_relatorio' %}?busca={{ request.GET.busca }}&ano_exame={{ request.GET.ano_exame }}&itens_por_pagina={{ request.GET.itens_por_pagina }}" 
+      target="_blank" 
+      class="btn btn-danger px-4 py-2 shadow-sm d-flex align-items-center">
+      <i class="fas fa-file-pdf me-2"></i> Exportar PDF
+    </a>
+  </div>
+  
+</div>
+</div>
+
+      <!-- Cards -->
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        <div class="col">
+          <div class="card shadow-sm border border-3 border-primary">
+            <div class="card-body d-flex justify-content-between align-items-center bg-primary text-white rounded">
+              <div>
+                <div class="text-uppercase small fw-bold">Total de Alunos</div>
+                <div class="h4 fw-bold">{{ alunos.paginator.count }}</div>
+              </div>
+              <i class="fas fa-user-graduate fa-2x"></i>
+            </div>
+          </div>
+        </div>
+
+        {% for disciplina, total in disciplinas_count.items %}
+        <div class="col">
+          <div class="card shadow-sm border-start border-4 border-success">
+            <div class="card-body d-flex justify-content-between align-items-center">
+              <div>
+                <div class="text-uppercase small fw-bold text-success">{{ disciplina }}</div>
+                <div class="h5 fw-bold text-dark">{{ total }}</div>
+              </div>
+              <i class="fas fa-book fa-lg text-success"></i>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="content mt-4">
+    <div class="container-fluid">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="card-title mb-0"><i class="fas fa-users me-2"></i> Alunos Cadastrados</h3>
+          <span class="badge bg-light text-dark">{{ alunos.paginator.count }} alunos</span>
+        </div>
+        <div class="card-body">
+
+          <!-- Filtro -->
+          <form method="get" class="mb-4">
+            <div class="row align-items-end g-2">
+              <div class="col-md-6 col-lg-6">
+                <label for="busca" class="form-label fw-bold text-muted">Buscar aluno</label>
+                <div class="input-group shadow-sm">
+                  <input type="text" id="busca" name="busca" value="{{ request.GET.busca }}" class="form-control border-end-0" placeholder="Nome, CPF ou Escola">
+                  <span class="input-group-text bg-white border-start-0"><i class="fas fa-search text-muted"></i></span>
+                </div>
+              </div>
+
+              <div class="col-md-3 col-lg-2">
+                <label for="ano_exame" class="form-label fw-bold text-muted">Ano do Exame</label>
+                <select name="ano_exame" id="ano_exame" class="form-control form-select shadow-sm" onchange="this.form.submit()">
+                  <option value="">Todos</option>
+                  {% for ano in anos_disponiveis %}
+                    <option value="{{ ano }}" {% if request.GET.ano_exame == ano|stringformat:"s" %}selected{% endif %}>{{ ano }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+
+              <div class="col-md-3 col-lg-2">
+                <label class="form-label invisible">.</label>
+                <button type="submit" class="btn btn-primary w-100 shadow-sm">
+                  <i class="fas fa-filter me-1"></i> Filtrar
+                </button>
+              </div>
+
+              {% if request.GET.busca %}
+              <div class="col-md-3 col-lg-2">
+                <label class="form-label invisible">.</label>
+                <a href="{% url 'lista_alunos_eja' %}" class="btn btn-outline-secondary w-100 shadow-sm">
+                  <i class="fas fa-times me-1"></i> Limpar
+                </a>
+              </div>
+              {% endif %}
+
+              <div class="col-md-3 col-lg-2">
+                <label for="itens_por_pagina" class="form-label fw-bold text-muted">Itens por página</label>
+                <select name="itens_por_pagina" id="itens_por_pagina" class="form-control form-select shadow-sm" onchange="this.form.submit()">
+                  {% for qtd in qtd_opcoes %}
+                    <option value="{{ qtd }}" {% if request.GET.itens_por_pagina|default:"25" == qtd|stringformat:"s" %}selected{% endif %}>{{ qtd }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          </form>
+
+          <!-- Tabela -->
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-striped">
+              <thead class="thead-light">
+                <tr>
+                  <th>Nome</th>
+                  <th>CPF</th>
+                  <th>Data de Nascimento</th>
+                  <th>Escola</th>
+                  <th>Ano do Exame</th>
+                  <th style="width: 160px;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                  <td>{{ aluno.nome }}</td>
+                  <td>{{ aluno.cpf }}</td>
+                  <td>{{ aluno.data_nascimento|date:"d/m/Y" }}</td>
+                  <td>{{ aluno.escola_2024 }}</td>
+                  <td>{{ aluno.ano_exame }}</td>
+                  <td class="text-center">
+                    <a href="{% url 'visualizar_aluno' aluno.id %}" class="btn btn-sm btn-info mb-1">
+                      <i class="fas fa-eye"></i> Ver
+                    </a>
+                    <a href="{% url 'editar_aluno' aluno.id %}" class="btn btn-sm btn-warning mb-1">
+                      <i class="fas fa-edit"></i> Editar
+                    </a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted">Nenhum aluno encontrado.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginação -->
+          <div class="mt-3 d-flex justify-content-between align-items-center">
+            <div class="text-muted small">
+              Página {{ alunos.number }} de {{ alunos.paginator.num_pages }} — Total: {{ alunos.paginator.count }} alunos
+            </div>
+            <nav>
+              <ul class="pagination mb-0">
+                {% if alunos.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.busca %}busca={{ request.GET.busca }}&{% endif %}{% if request.GET.itens_por_pagina %}itens_por_pagina={{ request.GET.itens_por_pagina }}&{% endif %}page={{ alunos.previous_page_number }}">Anterior</a>
+                </li>
+                {% endif %}
+                {% for num in alunos.paginator.page_range %}
+                  {% if alunos.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                  {% elif num > alunos.number|add:'-3' and num < alunos.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?{% if request.GET.busca %}busca={{ request.GET.busca }}&{% endif %}{% if request.GET.itens_por_pagina %}itens_por_pagina={{ request.GET.itens_por_pagina }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if alunos.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?{% if request.GET.busca %}busca={{ request.GET.busca }}&{% endif %}{% if request.GET.itens_por_pagina %}itens_por_pagina={{ request.GET.itens_por_pagina }}&{% endif %}page={{ alunos.next_page_number }}">Próxima</a>
+                </li>
+                {% endif %}
+              </ul>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

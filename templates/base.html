@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+  {% include 'header.html' %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JS -->
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+  <div class="wrapper">
+
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Sidebar -->
+    {% include 'sidebar.html' %}
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      {% block content %}
+      <!-- O conteúdo específico de cada página virá aqui -->
+      {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+
+  </div>
+
+
+
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+
+
+{% include 'includes/alerts.html' %}
+
+
+
+</body>
+</html>

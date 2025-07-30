@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Reinscrição nas Disciplinas Pendentes</h2>
+  <p>Candidato: <strong>{{ candidato.nome }}</strong></p>
+
+  <form method="post">
+    {% csrf_token %}
+    {% for disciplina, nota in disciplinas_pendentes.items %}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="disciplinas[]" value="{{ disciplina }}" id="disc_{{ forloop.counter }}">
+        <label class="form-check-label" for="disc_{{ forloop.counter }}">
+          {{ disciplina }}
+        </label>
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary mt-3">Confirmar Reinscrição</button>
+  </form>
+</div>
+{% endblock %}

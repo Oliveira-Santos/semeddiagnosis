@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    {% include 'header.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card-summary {
+            border-radius: 12px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        .bg-acertos { background: linear-gradient(135deg, #28a745, #218838); }
+        .bg-erros { background: linear-gradient(135deg, #dc3545, #bd2130); }
+        .bg-branco { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .chart-container, .chart-line-container {
+            position: relative;
+            width: 100%;
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        h1, h4 { font-weight: bold; }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    {% include 'navbar.html' %}
+    {% include 'sidebar.html' %}
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <h1 class="m-0 text-dark"><i class="fas fa-chart-bar me-2 text-primary"></i> Painel de Indicadores - EJA</h1>
+                        <p class="text-muted">Visualize o desempenho consolidado dos estudantes da Educação de Jovens e Adultos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Filtro por Ano -->
+<form method="get" class="row mb-4">
+    <div class="col-md-4">
+        <label for="ano_exame" class="form-label fw-bold">Filtrar por Ano</label>
+        <div class="input-group">
+            <select name="ano" id="ano_exame" class="form-select" onchange="this.form.submit()">
+                <option value="">Todos os Anos</option>
+                {% for ano in anos_disponiveis %}
+                    <option value="{{ ano }}" {% if ano|stringformat:"s" == ano_exame %}selected{% endif %}>{{ ano }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</form>
+
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card-summary bg-acertos">
+                            <h3>{{ percentual_acertos_iniciais |floatformat:2 }}%</h3>
+                            <p>Acertos - Iniciais</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-summary bg-erros">
+                            <h3>{{ percentual_erros_iniciais |floatformat:2 }}%</h3>
+                            <p>Erros - Iniciais</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-summary bg-branco">
+                            <h3>{{ percentual_branco_iniciais |floatformat:2 }}%</h3>
+                            <p>Branco - Iniciais</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-summary bg-acertos">
+                            <h3>{{ percentual_acertos_finais |floatformat:2 }}%</h3>
+                            <p>Acertos - Finais</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-summary bg-erros">
+                            <h3>{{ percentual_erros_finais |floatformat:2 }}%</h3>
+                            <p>Erros - Finais</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-summary bg-branco">
+                            <h3>{{ percentual_branco_portugues_finais |floatformat:2 }}%</h3>
+                            <p>Branco - Finais</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h4>Anos Iniciais</h4>
+                            <canvas id="chartIniciais"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="chart-container">
+                            <h4>Anos Finais</h4>
+                            <canvas id="chartFinais"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="chart-line-container">
+                            <h4>Comparativo Geral</h4>
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    {% include 'footer.html' %}
+</div>
+
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+
+<script>
+    new Chart(document.getElementById('chartIniciais'), {
+    type: 'bar',
+    data: {
+        labels: ['Acertos', 'Erros', 'Branco'],
+        datasets: [{
+            label: 'Anos Iniciais',
+            data: [{{ total_acertos_iniciais }}, {{ total_erros_iniciais }}, {{ total_branco_iniciais|default:"0" }}],
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: 'Distribuição - Anos Iniciais'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Quantidade' }
+            }
+        }
+    }
+});
+
+new Chart(document.getElementById('chartFinais'), {
+    type: 'bar',
+    data: {
+        labels: ['Acertos', 'Erros', 'Branco'],
+        datasets: [{
+            label: 'Anos Finais',
+            data: [{{ total_acertos_finais }}, {{ total_erros_finais }}, {{ total_branco_portugues_finais }}],
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: 'Distribuição - Anos Finais'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Quantidade' }
+            }
+        }
+    }
+});
+
+</script>
+
+<script>
+    // ... (os dois gráficos de barra que você já tem acima)
+
+// Gráfico de Barras Agrupadas: Comparação Anos Iniciais vs. Finais
+new Chart(document.getElementById('lineChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Acertos', 'Erros', 'Branco'],
+        datasets: [
+            {
+                label: 'Anos Iniciais',
+                data: [{{ total_acertos_iniciais }}, {{ total_erros_iniciais }}, {{ total_branco_iniciais|default:"0" }}],
+                backgroundColor: '#007bff'
+            },
+            {
+                label: 'Anos Finais',
+                data: [{{ total_acertos_finais }}, {{ total_erros_finais }}, {{ total_branco_portugues_finais }}],
+                backgroundColor: '#6f42c1'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Comparação de Desempenho - Iniciais vs. Finais'
+            }
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Categorias'
+                },
+                stacked: false
+            },
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Quantidade'
+                }
+            }
+        }
+    }
+});
+
+</script>
+
+
+</body>
+</html>

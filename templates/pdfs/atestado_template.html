@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2 { text-align: center; }
+        p { font-size: 1.1em; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <h2>Atestado de Participação</h2>
+    <p>Atestamos que <strong>{{ registro.nome }}</strong>, portador(a) do CPF {{ registro.cpf }} e RG {{ rg }},</p>
+    <p>nascido(a) em {{ data_nascimento }}, natural de {{ cidade_nascimento }}, filho(a) de {{ nome_pai }} e {{ nome_mae }},</p>
+    <p>participou do Exame de Suplência/EJA no ano de {{ registro.ano_exame }}.</p>
+    <p>Este atestado é emitido para os devidos fins.</p>
+    <br><br>
+    <p>__________, ______ de __________ de {{ registro.ano_exame }}</p>
+    <p><strong>Secretaria Municipal de Educação</strong></p>
+</body>
+</html>

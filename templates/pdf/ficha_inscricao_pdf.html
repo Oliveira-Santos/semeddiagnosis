@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Ficha de Inscrição - Suplência</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 15px;
+    font-size: 13px;
+  }
+
+  .card {
+    max-width: 850px;
+    margin: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-left: 6px solid #0056a3;
+    border-radius: 8px;
+    padding: 25px 35px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  }
+
+  .title {
+    text-align: center;
+    font-size: 22px;
+    color: #0056a3;
+    margin-bottom: 0;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 15px;
+    color: #0056a3;
+    border-bottom: 1px solid #ccc;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 25px;
+    font-size: 13px;
+  }
+
+  .field {
+    margin-bottom: 4px;
+  }
+
+  .label {
+    font-weight: bold;
+    color: #222;
+  }
+
+  .qrcode-container {
+    text-align: center;
+    margin-top: 25px;
+  }
+
+  .qrcode-container img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 11px;
+    color: #777;
+  }
+
+  .cabecalho-ficha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .cabecalho-ficha .title {
+    color: #0056a3;
+    font-size: 22px;
+    margin: 0;
+  }
+
+  .cabecalho-ficha .subtitle {
+    color: #333;
+    font-size: 13px;
+    margin: 6px 0 12px;
+    font-weight: 500;
+  }
+
+  .alerta-documento {
+    background-color: #ffecec;
+    color: #b30000;
+    font-weight: bold;
+    padding: 6px 14px;
+    border: 1px solid #ff9999;
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
+  }
+
+  ul li {
+    margin-bottom: 3px;
+  }
+
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+    }
+    .card {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .subtitle {
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  font-style: italic;
+  margin-top: 6px;
+  margin-bottom: 20px;
+  letter-spacing: 0.4px;
+  background-color: #f0f4f8;
+  padding: 6px 12px;
+  border-left: 4px solid #0056a3;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.title {
+  text-align: center;
+  font-size: 24px;
+  color: #0056a3;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 0;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #0056a3;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+
+</style>
+
+</head>
+<body>
+
+  <!-- Cabeçalho com imagem -->
+  <!-- Cabeçalho com imagem -->
+<div class="cabecalho-imagem" style="max-width: 990px; margin: 0 auto;">
+  <img src="{{ cabecalho_url }}" alt="Cabeçalho institucional"
+       style="width: 100%; max-height: 130px; object-fit: contain; margin-bottom: 10px;">
+</div>
+
+
+  <!-- Título e alerta -->
+  <div class="cabecalho-ficha">
+    <h1 class="title">FICHA DE INSCRIÇÃO</h1>
+    <p class="subtitle">Exame de Suplência 2025 – Educação de Jovens e Adultos</p>
+    <div class="alerta-documento">
+      ⚠ NÃO ESQUEÇA DE LEVAR DOCUMENTO COM FOTO
+    </div>
+  </div>
+
+  <!-- Dados do candidato -->
+  <h2>Dados Pessoais</h2>
+  <div class="grid">
+    <div class="field"><span class="label">Nome:</span> {{ candidato.nome }}</div>
+    <div class="field"><span class="label">CPF:</span> {{ candidato.cpf }}</div>
+    <div class="field"><span class="label">Email:</span> {{ candidato.email }}</div>
+    <div class="field"><span class="label">Data de Nascimento:</span> {{ candidato.data_nascimento|date:"d/m/Y" }}</div>
+    <div class="field"><span class="label">Telefone:</span> {{ candidato.telefone }}</div>
+    <div class="field"><span class="label">Telefone 2:</span> {{ candidato.telefone_2 }}</div>
+    <div class="field"><span class="label">Endereço:</span> {{ candidato.endereco }}</div>
+    <div class="field"><span class="label">Bairro:</span> {{ candidato.bairro }}</div>
+    <div class="field"><span class="label">Cidade:</span> {{ candidato.cidade }}</div>
+  </div>
+
+  {% if candidato.maior_de_18 == "Não" %}
+  <h2>Dados do Responsável</h2>
+  <div class="grid">
+    <div class="field"><span class="label">Nome do Responsável:</span> {{ candidato.nome_responsavel }}</div>
+    <div class="field"><span class="label">CPF:</span> {{ candidato.cpf_responsavel }}</div>
+    <div class="field"><span class="label">RG:</span> {{ candidato.rg_responsavel }}</div>
+    <div class="field"><span class="label">Tipo:</span> {{ candidato.tipo_responsavel }}</div>
+  </div>
+  {% endif %}
+
+  <h2>Informações da Prova</h2>
+  <div class="grid">
+    <div class="field"><span class="label">Local Realização da Prova:</span> {{ candidato.local_prova }}</div>
+    <div class="field"><span class="label">Data da Prova:</span> {{ candidato.data_prova|date:"d/m/Y" }} às {{ candidato.data_prova|time:"H:i" }}</div>
+    <div class="field"><span class="label">Escola de Origem:</span> {{ candidato.escola_2024 }}</div>
+    <div class="field"><span class="label">Prova Todas as Disciplinas:</span> {{ candidato.prova_todas_disciplinas }}</div>
+  </div>
+
+  <h2>Necessidade Especial</h2>
+  <div class="grid">
+    <div class="field">
+  <span class="label">Possui:</span>
+  {% if candidato.possui_necessidade_especial %}Sim{% else %}Não{% endif %}
+</div>
+
+    <div class="field"><span class="label">Descrição:</span> {{ candidato.necessidade_especial_detalhe }}</div>
+  </div>
+
+  <h2>Status da Inscrição</h2>
+  <div class="grid">
+    <div class="field"><span class="label">Situação:</span> {{ candidato.status }}</div>
+    <div class="field"><span class="label">Data da Inscrição:</span> {{ candidato.data_inscricao|date:"d/m/Y H:i" }}</div>
+  </div>
+
+<h2>Disciplinas da Prova</h2>
+{% if candidato.prova_todas_disciplinas == "Sim" %}
+  <p style="font-size: 13px; margin-left: 5px;">O candidato irá realizar prova de todas as disciplinas.</p>
+{% elif disciplinas_list %}
+  <div style="display: flex; gap: 40px; font-size: 13px; padding-left: 10px;">
+    <ul style="list-style: disc; margin: 0;">
+      {% for disciplina in disciplinas_list|slice:":4" %}
+        <li>{{ disciplina }}</li>
+      {% endfor %}
+    </ul>
+    <ul style="list-style: disc; margin: 0;">
+      {% for disciplina in disciplinas_list|slice:"4:" %}
+        <li>{{ disciplina }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <ul style="font-size: 13px; padding-left: 20px;">
+    <li><em>Não informado.</em></li>
+  </ul>
+{% endif %}
+
+
+
+
+
+  <!-- QR Code -->
+  <div class="qrcode-container">
+    <img src="{{ qrcode_url }}" alt="QR Code de Identificação">
+    <p>Apresente este cartão com QR Code no dia da prova</p>
+  </div>
+
+  <!-- Rodapé com imagem -->
+<!-- Rodapé com imagem -->
+<div class="rodape-imagem" style="max-width: 990px; margin: 10px auto 0;">
+  <img src="{{ rodape_url }}" alt="Rodapé institucional"
+       style="width: 100%; max-height: 100px; object-fit: contain;">
+</div>
+
+
+</body>
+</html>

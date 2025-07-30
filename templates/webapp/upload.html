@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Arquivo</title>
+    <!-- Adicione aqui os links para CSS, se necessário -->
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Navbar -->
+        {% include 'navbar.html' %}
+
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}
+
+        <!-- Conteúdo da Página -->
+        <div class="content-wrapper">
+            <section class="content">
+                <div class="container-fluid">
+                    <h1>Upload de Arquivo</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        {% include 'footer.html' %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>

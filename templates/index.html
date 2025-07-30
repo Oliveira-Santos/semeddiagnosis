@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EJA - Cadastro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Other head content -->
+    <link rel="stylesheet" href="{% static 'assets/dist/css/style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+</head>
+
+<style>
+    body {
+       font-family: 'Roboto', sans-serif;
+       background-color: #f5f7fa;
+   }
+
+   .modern-card {
+       background: linear-gradient(145deg, #ffffff, #f0f0f0);
+       box-shadow: 0 10px 20px rgba(236, 103, 14, 0.08);
+       border-radius: 15px;
+       transition: all 0.3s ease-in-out;
+       padding: 30px;
+       margin-bottom: 20px;
+   }
+
+   .modern-card:hover {
+       box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+       transform: scale(1.03);
+   }
+
+   .card-title {
+       font-size: 1.5rem;
+       font-weight: bold;
+       color: #333;
+       margin-bottom: 15px;
+       position: relative;
+   }
+
+   .card-title::after {
+       content: '';
+       display: block;
+       width: 50px;
+       height: 3px;
+       background: #f57105;
+       margin: 10px auto;
+   }
+
+   .card-text {
+       font-size: 1rem;
+       color: #666;
+       margin-bottom: 20px;
+   }
+
+   .btn-modern {
+       background: #f57105;
+       color: white;
+       padding: 12px 25px;
+       font-size: 1rem;
+       border-radius: 50px;
+       transition: background 0.3s ease;
+       border: none;
+       text-decoration: none; /* Removes underline */
+   }
+
+   .btn-modern:hover {
+       background: #f57105;
+       color: #fff;
+       text-decoration: none;
+   }
+
+   .btn-modern:focus {
+       outline: none;
+       box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+   }
+
+   .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .modern-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+}
+
+.modern-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom: 15px;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555555;
+    margin-bottom: 25px;
+}
+
+.btn-modern {
+    background: linear-gradient(to right, #007bff, #00c6ff);
+    color: #fff !important;
+    padding: 12px 20px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-modern:hover {
+    background: linear-gradient(to right, #0056b3, #009ec3);
+    transform: scale(1.05);
+    color: #fff;
+}
+
+.hero-card-overlay {
+    background: rgba(0, 0, 0, 0.65);
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    max-width: 700px;
+    width: 90%;
+}
+
+.hero-card-overlay h1 {
+    font-size: 2.8rem;
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.hero-card-overlay p {
+    font-size: 1.2rem;
+    color: #dddddd;
+    margin-bottom: 25px;
+}
+
+.input-group-text {
+  background-color: #f0f0f0;
+  border: 1px solid #ced4da;
+}
+
+#school-results .school-card {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+#school-results .school-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.modal-content {
+  border-radius: 1.5rem !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: none;
+  padding: 1rem 1.5rem;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.input-group-text {
+  background-color: #f8f9fa;
+  border-right: none;
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.modal-content {
+  border-radius: 1.5rem !important;
+  overflow: hidden;
+}
+
+.modal-header.bg-info {
+  background: linear-gradient(to right, #17a2b8, #00c9d8);
+}
+
+.input-group-text {
+  background-color: #f0f0f0;
+  border-right: none;
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.modal-footer .btn-modern {
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: #fff !important;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  border: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-footer .btn-modern:hover {
+  background: linear-gradient(to right, #0056b3, #009ec3);
+  transform: scale(1.05);
+  color: #fff;
+}
+
+
+.footer-bg {
+            background-image: url('{% static "assets/dist/img/footer-bg1.jpg" %}');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            position: relative;
+            color: white;
+        }
+
+        .footer-bg .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Transparência de 50% */
+            z-index: 1;
+        }
+
+        .footer-bg .container {
+            position: relative;
+            z-index: 2;
+            /* Garante que o conteúdo fique na frente do overlay */
+        }
+
+
+        /* Transparência aplicada */
+        .footer-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Preta com 50% de opacidade */
+            z-index: 1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 2;
+            /* Garante que o conteúdo fique acima da camada de transparência */
+        }
+
+
+
+
+
+
+</style>
+<body>
+   <!-- Navbar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <!-- Logo -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="{% static 'assets/dist/img/semed_branca.png' %}" alt="Logo SEMED" style="height: 50px;">
+    </a>
+
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nav Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+  <a class="nav-link disabled text-white-50" href="#" tabindex="-1" aria-disabled="true">
+    Serviços
+  </a>
+</li>
+
+        <!-- <li class="nav-item"><a class="nav-link" href="#">Eventos</a></li> -->
+
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <span class="nav-link"><i class="fas fa-user"></i> {{ user.nome_completo }}</span>
+          </li>
+          <li class="nav-item">
+            <span class="nav-link"><i class="fas fa-id-card"></i> CPF: {{ user.cpf }}</span>
+          </li>
+          <li class="nav-item">
+            <form method="POST" action="{% url 'logout' %}" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a href="{% url 'login_candidato' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login Candidato</a>
+          </li>
+        {% endif %}
+
+        <li class="nav-item">
+          <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cpfModal">
+            <i class="fas fa-user-shield"></i> Administrador
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- CPF Administrador Modal -->
+<!-- CPF Modal -->
+<div class="modal fade" id="cpfModal" tabindex="-1" aria-labelledby="cpfModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 shadow-lg">
+      <div class="modal-header bg-info text-white border-0 rounded-top-4">
+        <h5 class="modal-title fw-bold" id="cpfModalLabel">
+          <i class="fas fa-id-card me-2"></i> Verificar CPF
+        </h5>
+      </div>
+
+      <div class="modal-body p-4">
+        <form id="cpfForm" method="POST">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="cpf_admin" class="form-label">Digite seu CPF:</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-user"></i></span>
+              <input type="text" class="form-control" id="cpf_admin" name="cpf_admin" placeholder="000.000.000-00" required>
+            </div>
+          </div>
+          <div id="cpfErrorMessage" class="text-danger small mt-2"></div>
+        </form>
+      </div>
+
+      <div class="modal-footer justify-content-between px-4 pb-4 border-0">
+        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal" id="cancelBtn">
+          <i class="fas fa-times me-1"></i> Cancelar
+        </button>
+        <button type="button" class="btn-modern" id="verifyCpfBtn">
+          <span class="btn-text"><i class="fas fa-search me-1"></i> Verificar</span>
+          <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Trigger Button for Modal
+<li class="nav-item">
+    <a href="#" class="nav-link" data-toggle="modal" data-target="#cpfVerificationModal">
+        <i class="fas fa-user-shield"></i> Administrador
+    </a>
+</li> -->
+<section class="hero position-relative" style="min-height: 60vh; margin: 0; padding: 0;">
+  <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 100%;">
+    <div class="carousel-inner" style="height: 100%;">
+      <div class="carousel-item active" style="height: 100%;">
+        <img src="{% static 'assets/dist/img/banner7.jpeg' %}" alt="Banner 1"
+             style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div class="carousel-item" style="height: 100%;">
+        <img src="{% static 'assets/dist/img/banner5.jpg' %}" alt="Banner 2"
+             style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      <div class="carousel-item" style="height: 100%;">
+        <img src="{% static 'assets/dist/img/banner4.jpeg' %}" alt="Banner 3"
+             style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+    </div>
+
+    <!-- Controles -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+  </div>
+
+<!-- Conteúdo fixo visível sobre todas as imagens -->
+<div class="carousel-overlay position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center text-center" style="z-index: 10;">
+  <div class="hero-card-overlay">
+    <h1 class="display-4 fw-bold text-white">Exame de Suplência 2025</h1>
+    <p class="lead text-light mb-4">Exame de Conclusão do Ensino Fundamental</p>
+
+<div class="d-grid gap-2 d-sm-flex justify-content-center flex-wrap">
+  <a href="#" class="btn-modern w-100 w-sm-auto mb-2" data-bs-toggle="modal" data-bs-target="#verificarCpfModal" id="registerButton">
+    <span class="btn-text"><i class="fas fa-user-plus me-1"></i> Cadastre-se Agora</span>
+    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+  </a>
+  <a href="{% url 'login_candidato' %}" class="btn-modern w-100 w-sm-auto mb-2" id="loginButton">
+    <span class="btn-text"><i class="fas fa-sign-in-alt me-1"></i> LOGIN NO SISTEMA</span>
+    <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+  </a>
+</div>
+
+
+  </div>
+</div>
+
+
+</section>
+
+    <!-- Modal para verificar CPF Candidato -->
+   <div class="modal fade" id="verificarCpfModal" tabindex="-1" aria-labelledby="verificarCpfModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-primary text-white rounded-top-4">
+        <h5 class="modal-title" id="verificarCpfModalLabel"><i class="fas fa-id-card me-2"></i>Verificar CPF</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body p-4">
+        <form id="verificarCpfForm">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="cpf_candidato_modal" class="form-label">Digite seu CPF</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+              <input type="text" class="form-control" id="cpf_candidato_modal" name="cpf_candidato_modal" placeholder="000.000.000-00" required>
+            </div>
+          </div>
+          <div class="text-end mt-4">
+            <button type="button" id="verificarCpfBtn" class="btn-modern">
+              <span class="btn-text"><i class="fas fa-search me-1"></i>Verificar CPF</span>
+              <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+            <!-- Modal for user registration REGISTRO-->
+            <div class="modal fade" id="cadastroModal" tabindex="-1" aria-labelledby="cadastroModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl"> <!-- Modal is larger to accommodate more fields -->
+                    <div class="modal-content">
+
+                        <div class="modal-header d-flex justify-content-between align-items-center flex-wrap">
+                <h5 class="modal-title mb-0" id="cadastroModalLabel" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    Informações do Participante
+                </h5>
+                <p class="modal-location text-end mb-0 ms-auto small text-muted" id="modalDateLocation" style="white-space: nowrap;">
+                    Canaã dos Carajás, PA: <span id="currentDate"></span>
+                </p>
+            </div>
+
+
+            <div class="modal-body">
+
+                <!-- Timer with modern design -->
+                <div class="timer-container text-center">
+                    <div class="timer-circle">
+                        <span id="timer">20:00</span>
+                    </div>
+                    <p style="font-size: 1.0rem; font-weight: bold; color: #d9534f; text-align: center; margin-top: 10px;">
+                        ⏳ Tempo restante para preencher o cadastro.
+                    </p>
+                    
+                    <p style="font-size: 1.2rem; font-weight: bold; color: #f47835; text-align: center; margin-top: 20px;">
+                        📚 Exame de Suplência 2025.
+                    </p>
+                    
+                </div>
+                <hr>
+
+                <form id="cadastroForm" method="POST" action="{% url 'cadastro_usuario' %}">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <!-- Nome Completo -->
+                        <div class="col-md-4 mb-3">
+                            <label for="nome_completo" class="form-label">Nome Completo</label>
+                            <input type="text" class="form-control" id="nome_completo" name="nome_completo" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-4 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <!-- CPF -->
+                        <!-- CPF do Candidato Formulário -->
+                        <!-- CPF do Candidato Formulário -->
+                        <div class="col-md-4 mb-3">
+                            <label for="cpf_form" class="form-label">Número do CPF do Candidato</label>
+                            <input type="text" class="form-control" id="cpf_candidato" name="cpf_form" placeholder="Digite seu CPF" required>
+                        </div>
+
+                        
+                    </div>
+                    <!-- ****************************************************************************************************************************** -->
+
+
+                    <div class="row">
+                        
+
+                        <!-- Data de Nascimento -->
+                        <div class="col-md-4 mb-3">
+                            <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" required onchange="verificarIdade()">
+                        </div>
+
+                          <!-- Radio buttons para maior de idade, inicialmente desabilitados -->
+                        <div class="col-md-4 mb-3">
+                            <label for="maior_de_18" class="form-label">O Candidato é maior de 18 anos?</label><br>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="maior_de_18_sim" name="maior_de_18" value="Sim" class="form-check-input" onchange="verificarMaiorIdade()" disabled checked>
+                                <label for="maior_de_18_sim" class="form-check-label">Sim</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input type="radio" id="maior_de_18_nao" name="maior_de_18" value="Não" class="form-check-input" onchange="verificarMaiorIdade()" disabled>
+                                <label for="maior_de_18_nao" class="form-check-label">Não</label>
+                            </div>
+                        </div>
+
+                        <!-- Nome do Responsável legal -->
+                        <div class="col-md-4 mb-3">
+                            <label for="nomeResponsavel" class="form-label">Nome do Responsável Legal</label>
+                            <input type="text" class="form-control" id="nome_responsavel" name="nome_responsavel" disabled>
+                        </div>
+                        
+                        
+                    </div>
+
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row">
+                       
+
+                        <!-- CPF do Responsável -->
+                        <div class="col-md-4 mb-3">
+                            <label for="cpf_responsavel" class="form-label">CPF do Responsável</label>
+                            <input type="text" class="form-control" id="cpf_responsavel" name="cpf_responsavel" disabled>
+                        </div>
+                        
+                        <!-- Nome do Responsável legal -->
+                        <div class="col-md-4 mb-3">
+                            <label for="rg_responsavel" class="form-label">RG do Responsável</label>
+                        <input type="text" class="form-control" id="rg_responsavel" name="rg_responsavel" disabled>
+                        </div>
+
+                        <!-- Tipo de Responsável Legal -->
+                        <div class="col-md-4 mb-3">
+                            <label for="tipoResponsavel" class="form-label">Tipo de Responsável Legal</label>
+                            <select class="form-control" id="tipo_responsavel" name="tipo_responsavel" disabled>
+                                <option value="">Selecione</option>
+                                <option value="pai">Pai</option>
+                                <option value="mae">Mãe</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row">
+                        
+
+                        <!-- Telefone -->
+                        <div class="col-md-4 mb-3">
+                            <label for="telefone" class="form-label">Nº de Telefone do Candidato</label>
+                            <input type="tel" class="form-control" id="telefone" name="telefone" required>
+                        </div>
+
+                        <!-- Telefone 2 -->
+                        <div class="col-md-4 mb-3">
+                            <label for="telefone_2" class="form-label">Telefone de Contato 2</label>
+                            <input type="tel" class="form-control" id="telefone_2" name="telefone_2">
+                        </div>
+
+                        <!-- Cidade -->
+                        <div class="col-md-4 mb-3">
+                            <label for="cidade" class="form-label">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" required>
+                        </div>
+
+                    </div>
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row">
+                        
+
+                         <!-- Endereço -->
+                         <div class="col-md-6 mb-3">
+                            <label for="endereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" required>
+                        </div>
+
+                        <!-- Bairro -->
+                        <div class="col-md-6 mb-3">
+                            <label for="bairro" class="form-label">Bairro</label>
+                            <select class="form-control" id="bairro" name="bairro" required>
+                                <option value="">Selecione o Bairro</option>
+                                <!-- Add options dynamically -->
+                            </select>
+                        </div>
+
+
+                        <div class="row">
+    <!-- Fez exame supletivo -->
+    <div class="col-md-4 mb-3">
+        <label for="fez_exame_supletivo" class="form-label">Já fez a prova do exame supletivo?</label><br>
+        <div class="form-check form-check-inline">
+            <input type="radio" id="fez_exame_sim" name="fez_exame_supletivo" value="Sim" class="form-check-input" required>
+            <label for="fez_exame_sim" class="form-check-label">Sim</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="radio" id="fez_exame_nao" name="fez_exame_supletivo" value="Não" class="form-check-input" required checked>
+            <label for="fez_exame_nao" class="form-check-label">Não</label>
+        </div>
+    </div>
+
+    <!-- Ano da última prova -->
+    <div class="col-md-4 mb-3" id="ano_ultima_prova_div" style="display: none;">
+        <label for="ano_ultima_prova" class="form-label">Ano da última prova</label>
+        <input type="number" class="form-control" id="ano_ultima_prova" name="ano_ultima_prova" min="2000" max="2025">
+    </div>
+</div>
+
+
+
+
+                    </div>
+
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row align-items-start">
+
+<!-- Prova de todas disciplinas -->
+<div class="col-md-4 mb-3">
+    <label class="form-label">Deseja realizar a prova de todas as disciplinas?</label><br>
+    <div class="form-check form-check-inline">
+        <input type="radio" id="prova_todas_disciplinas_sim" name="prova_todas_disciplinas"
+               value="Sim" class="form-check-input" required>
+        <label for="prova_todas_disciplinas_sim" class="form-check-label">Sim</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input type="radio" id="prova_todas_disciplinas_nao" name="prova_todas_disciplinas"
+               value="Não" class="form-check-input" required checked>
+        <label for="prova_todas_disciplinas_nao" class="form-check-label">Não</label>
+    </div>
+</div>
+
+<!-- Lista de Disciplinas -->
+<div class="col-md-8 mb-3" id="grupo_disciplinas">
+    <label class="form-label">Qual(is) disciplina(s) deseja realizar a prova?</label>
+    <div class="row" id="container-disciplinas">
+        {% for disciplina in disciplinas %}
+        <div class="col-md-6">
+            <div class="form-check">
+                <input type="checkbox" name="disciplinas[]" value="{{ disciplina.nome }}"
+                       class="form-check-input disciplina-checkbox" id="disciplina_{{ forloop.counter }}">
+                <label for="disciplina_{{ forloop.counter }}" class="form-check-label">
+                    {{ disciplina.nome }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+    <!-- Necessidade especial -->
+    <div class="col-md-4 mb-3">
+        <label for="necessidade_especial" class="form-label">Possui necessidade especial?</label><br>
+        <div class="form-check form-check-inline">
+            <input type="radio" id="necessidade_especial_sim" name="possui_necessidade_especial"
+                value="Sim" class="form-check-input" required onchange="toggleSpecialNeeds(true)">
+            <label for="necessidade_especial_sim" class="form-check-label">Sim</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input type="radio" id="necessidade_especial_nao" name="possui_necessidade_especial"
+                value="Não" class="form-check-input" checked onchange="toggleSpecialNeeds(false)">
+            <label for="necessidade_especial_nao" class="form-check-label">Não</label>
+        </div>
+    </div>
+
+</div>
+
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row">
+
+                    
+                    
+                        <div class="col-md-4 mb-3">
+                            <label for="necessidade_especial_detalhe" class="form-label">Caso possua, favor
+                                assinalar</label>
+                            <select class="form-select" id="necessidade_especial_detalhe"
+                                name="necessidade_especial_detalhe" disabled>
+                                <option value="">Selecione...</option>
+                                <option value="Baixa Visão">Baixa Visão</option>
+                                <option value="Cegueira">Cegueira</option>
+                                <option value="Auditiva">Deficiência Auditiva</option>
+                                <option value="Deficiência Física">Deficiência Física</option>
+                                <option value="Deficiência Intelectual">Deficiência Intelectual</option>
+                                <option value="Surdez">Surdez</option>
+                                <option value="Surdocegueira">Surdocegueira</option>
+                                <option value="Transtorno do espectro autista">Transtorno do espectro autista</option>
+                                <option value="Altas habilidades/superdotação">Altas habilidades/superdotação</option>
+                                <option value="Outras">Outras</option>
+                            </select>
+                        </div>
+
+                        <!-- Senha -->
+                        <div class="col-md-4 mb-3">
+                            <label for="senha" class="form-label">Senha</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="senha" name="senha" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('senha', 'eyeSenha')">
+                                        <i id="eyeSenha" class="fas fa-eye" style="font-size: 1.5em;"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Confirmar Senha -->
+                        <div class="col-md-4 mb-3">
+                            <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" required>
+                                <div class="input-group-append">
+                                    <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('confirmar_senha', 'eyeConfirmarSenha')">
+                                        <i id="eyeConfirmarSenha" class="fas fa-eye" style="font-size: 1.5em;"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                   <hr>
+                        <div class="row">
+                            <h5 class="text-primary">Informações sobre a Prova</h5>
+                        
+                            <!-- Local de Realização da Prova -->
+                            <div class="col-md-4 mb-3">
+                                <label for="local_prova" class="form-label">Em qual local deseja realizar as provas?*</label>
+                                <select class="form-control" id="local_prova" name="local_prova" required>
+                                    <option value="" disabled selected>Selecione o local da prova</option>
+                                    <option value="CMEJA Jose de Deus Andrade">CMEJA Jose de Deus Andrade</option>
+                                    <option value="EMEB Tancredo Neves">EMEB Tancredo Neves</option>
+                                    <option value="EMEB Benedita Torres">EMEB Benedita Torres</option>
+                                    <option value="EMEB Adelaide Molinari">EMEB Adelaide Molinari</option>
+                                    <option value="EMEB Teotônio Vilela">EMEB Teotônio Vilela</option>
+                                    <option value="EMEB Luiz Carlos Prestes">EMEB Luiz Carlos Prestes</option>
+                                </select>
+
+                            </div>
+                        
+                            <div class="col-md-4 mb-3">
+                                <label for="data_prova" class="form-label">Data de realização da Prova*</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="data_prova_checkbox" name="data_prova_checkbox" checked disabled>
+                                    <label class="form-check-label" for="data_prova_checkbox">01/10/2025</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Nome da Escola (Se Estudando) -->
+                            <div class="col-md-4 mb-3">
+                                <label for="escola_2024" class="form-label">Caso esteja matriculado em 2025, qual escola*</label>
+                                <select class="form-control" id="escola_2024" name="escola_2024" required>
+                                    <option value="" disabled selected>Selecione a escola</option>
+                                    <option value="NÃO ESTOU ESTUDANDO EM 2024">NÃO ESTOU ESTUDANDO EM 2024</option>
+                                    <option value="CMEJA JOSÉ DE DEUS ANDRADE">CMEJA JOSÉ DE DEUS ANDRADE</option>
+                                    <option value="EMEIF ADELAIDE MOLINARI">EMEIF ADELAIDE MOLINARI</option>
+                                    <option value="EMEIF CARLOS HENRIQUE">EMEIF CARLOS HENRIQUE</option>
+                                    <option value="EMEIF JUSCELINO KUBITSCHEK">EMEIF JUSCELINO KUBITSCHEK</option>
+                                    <option value="EMEIF MAGALHÃES BARATA">EMEIF MAGALHÃES BARATA</option>
+                                    <option value="EMEIF RAIMUNDO DE OLIVEIRA">EMEIF RAIMUNDO DE OLIVEIRA</option>
+                                    <option value="EMEIF TEOTÔNIO VILELA">EMEIF TEOTÔNIO VILELA</option>
+                                    <option value="EMEF BENEDITA TORRES">EMEF BENEDITA TORRES</option>
+                                    <option value="EMEF SEBASTIÃO AGRIPINO DA SILVA">EMEF SEBASTIÃO AGRIPINO DA SILVA</option>
+                                    <option value="EMEF ALEXSANDRO NUNES DE SOUZA GOMES">EMEF ALEXSANDRO NUNES DE SOUZA GOMES</option>
+                                    <option value="EMEF CARMELO MENDES DA SILVA">EMEF CARMELO MENDES DA SILVA</option>
+                                    <option value="EMEB LUÍS CARLOS PRESTES">EMEB LUÍS CARLOS PRESTES</option>
+                                    <option value="EMEF JOÃO NELSON DOS PRAZERES HENRIQUES">EMEF JOÃO NELSON DOS PRAZERES HENRIQUES</option>
+                                    <option value="EMEF MARIA DE LOURDES ROCHA RODRIGUES">EMEF MARIA DE LOURDES ROCHA RODRIGUES</option>
+                                    <option value="EMEB RONILTON ARIDAL DA SILVA GRILO">EMEB RONILTON ARIDAL DA SILVA GRILO</option>
+                                    <option value="EMEB GERCINO CORREA">EMEB GERCINO CORREA</option>
+                                    <option value="EMEIF TANCREDO DE ALMEIDA NEVES">EMEIF TANCREDO DE ALMEIDA NEVES</option>
+                                    <option value="EMEIF FRANCISCA ROMANA">EMEIF FRANCISCA ROMANA</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ****************************************************************************************************************************** -->
+
+                    <div class="row">
+                        <!-- Deseja participar do Aulão? -->
+<!-- Pergunta principal -->
+<div class="mb-3">
+  <label class="form-label">Deseja participar dos aulões preparatórios para o exame de suplência 2025?</label><br>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="deseja_participar_aulao" id="aulao_sim" value="Sim">
+    <label class="form-check-label" for="aulao_sim">Sim</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="deseja_participar_aulao" id="aulao_nao" value="Não" checked>
+    <label class="form-check-label" for="aulao_nao">Não</label>
+  </div>
+</div>
+
+<!-- Turnos (inicialmente oculto) -->
+<div id="aulao_campos" style="display: none;">
+  <label class="form-label">Em caso afirmativo, escolha o turno desejado:</label>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Matutino" id="turno_matutino">
+    <label class="form-check-label" for="turno_matutino">Turno Matutino</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Vespertino" id="turno_vespertino">
+    <label class="form-check-label" for="turno_vespertino">Turno Vespertino</label>
+  </div>
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Noturno" id="turno_noturno">
+    <label class="form-check-label" for="turno_noturno">Turno Noturno</label>
+  </div>
+</div>
+
+
+
+
+
+
+                    </div>
+                    <!-- ****************************************************************************************************************************** -->
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="termos_condicoes" name="termos_condicoes" required>
+                                <label class="form-check-label" for="termos_condicoes" style="font-weight: bold; color: #90aff0; font-size: 0.8rem; text-align: justify;">
+                                    Eu li e aceito os 
+                                    <a href="{% static 'downloads1/edital.pdf' %}" target="_blank" style="text-decoration: underline; font-weight: bold;">
+                                        <b>TERMOS e CONDIÇÕES</b>
+                                    </a>
+                                    deste Edital, incluindo as diretrizes para o exame de Suplência 2025, a data programada para 
+                                    <strong>1º de outubro de 2025</strong>, o horário de início às <strong>7h30</strong> e o formato 
+                                    <strong>presencial</strong> do exame.
+                                </label>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ****************************************************************************************************************************** -->
+                <hr>
+                    <button type="submit" id="submitButton" class="btn btn-primary w-20" disabled>Cadastrar</button>
+                    <button type="button" class="btn btn-secondary" id="fecharBtn" data-bs-dismiss="modal" onclick="location.reload()">Fechar</button>
+
+                </div>
+                    </div>
+                </form>
+
+
+                
+<!-- Modal: Idade mínima -->
+<div class="modal fade" id="idadeModal" tabindex="-1" aria-labelledby="idadeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="idadeModalLabel">Idade mínima não atingida</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p>A idade mínima para participar do Exame de Suplência 2025 é de <strong>15 anos completos até 19/10/2025</strong>.</p>
+        <p>Se você tem menos de 15 anos nesta data, não poderá se inscrever neste exame.</p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" onclick="fecharModalIdade()">Entendi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de aviso CPF já existe -->
+<div class="modal fade" id="cpfExisteModal" tabindex="-1" aria-labelledby="cpfExisteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 rounded-4 shadow-lg">
+      <div class="modal-header bg-warning text-dark border-0 rounded-top-4">
+        <h5 class="modal-title w-100 fw-bold" id="cpfExisteModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i> CPF já cadastrado
+        </h5>
+      </div>
+      <div class="modal-body fs-5 text-muted py-4">
+        Este CPF já está cadastrado no sistema.<br>
+        Você será redirecionado para o painel de login.
+      </div>
+      <div class="modal-footer justify-content-center border-0 pb-4">
+        <button type="button" class="btn-modern px-4" id="confirmarRedirecionamentoBtn">
+          <i class="fas fa-sign-in-alt me-2"></i> Ok, ir para o login
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+            <!-- Three modern cards for links -->
+            <div class="container mt-5">
+                <div class="row">
+                    <!-- Card for Edital Download -->
+                    <div class="col-md-4">
+                        <div class="modern-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Baixar Edital</h5>
+                                <p class="card-text">Download do edital para o processo seletivo.</p>
+                                <a href="{% static 'downloads1/edital.pdf' %}" class="btn-modern" target="_blank"><b>Baixar Edital</b></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card for Exam Content Download -->
+                    <div class="col-md-4">
+                        <div class="modern-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Baixar Conteúdo</h5>
+                                <p class="card-text">Baixe o conteúdo programático para a prova.</p>
+                                <a href="{% static 'downloads1/conteudoProgramatico2025.pdf' %}" class="btn-modern" target="_blank"><b>Baixar Conteúdo</b></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card for Registration Form Print -->
+                    <div class="col-md-4">
+                        <div class="modern-card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Imprimir Ficha de Inscrição</h5>
+                                <p class="card-text">Ficha de inscrição para o processo seletivo.</p>
+                                <a href="{% url 'login_candidato' %}" class="btn-modern" target="_blank"><b>Imprimir Ficha</b></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="container mt-5">
+  <h2 class="text-center mb-4 fw-bold text-primary">
+    <i class="fas fa-search-location me-2"></i>Buscar Escolas por Endereço e CEP
+  </h2>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label for="address-input" class="form-label">Endereço:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-road"></i></span>
+        <input type="text" id="address-input" class="form-control" placeholder="Digite o Endereço">
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="neighborhood-input" class="form-label">Bairro:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-city"></i></span>
+        <input type="text" id="neighborhood-input" class="form-control" placeholder="Digite o Bairro">
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="cep-input" class="form-label">CEP:</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-envelope-open-text"></i></span>
+        <input type="text" id="cep-input" class="form-control" placeholder="Digite o CEP">
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-4">
+    <button onclick="searchSchools()" id="search-button" class="btn-modern">
+      <span class="btn-text"><i class="fas fa-search me-1"></i>Buscar</span>
+      <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div id="school-results" class="mt-5">
+    <!-- Resultados da busca aparecem aqui -->
+  </div>
+
+  <h3 class="mt-5 mb-3 text-center text-primary fw-bold">
+    <i class="fas fa-map-marked-alt me-2"></i>Mapa de Canaã dos Carajás
+  </h3>
+
+  <div class="ratio ratio-16x9 rounded shadow mb-5 border border-primary border-2">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31274.223616217325!2d-49.87277499085988!3d-6.4935819731227285!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x92d9dfee1bcfb899%3A0xd9b72be0bcafe53b!2sCana%C3%A3%20dos%20Caraj%C3%A1s%2C%20PA!5e0!3m2!1spt-BR!2sbr!4v1696082853663!5m2!1spt-BR!2sbr"
+      class="w-100 h-100 border-0 rounded"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</div>
+
+            
+            <!-- Footer -->
+            <!-- Footer -->
+    <footer class="footer-bg py-5">
+        <div class="container">
+            <!-- Linhas principais -->
+            <div class="row">
+                <!-- Destaques -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase text-primary mb-4">Destaques</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-4 d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/unifespa.png' %}" alt="Unifesspa" class="me-3"
+                                style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify; color: #ffffff;">
+                                        <strong>Unifesspa abre edital para programa de permanência de alunos</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted;">27 de novembro de 2024</small>
+                            </div>
+                        </li>
+                        <li class="mb-4 d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/eja.png' %}" alt="EJA curso profissionalizante"
+                                class="me-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify; color: #ffffff;">
+                                        <strong>De olho no mercado de trabalho: Estudantes da EJA farão curso
+                                            profissionalizante</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted;">27 de novembro de 2024</small>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/planetario.png' %}" alt="Planetário Canaã dos Carajás"
+                                class="me-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify; color: #ffffff;">
+                                        <strong>Planetário completa 1 ano com destaque para educação e turismo em Canaã
+                                            dos Carajás</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted;">27 de novembro de 2024</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Mais Acessados -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase text-info mb-4">Mais Acessados</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-4 d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/diretor.png' %}" alt="Certificação para Diretores"
+                                class="me-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify;">
+                                        <strong>Processo de seleção e certificação para a função pública de Diretor e
+                                            Vice-diretor de unidade escolar</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted">18 de outubro de 2023</small>
+                            </div>
+                        </li>
+                        <li class="mb-4 d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/eja_matriculas.png' %}" alt="Matrículas para EJA"
+                                class="me-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify;">
+                                        <strong>Matrículas abertas para Educação de Jovens e Adultos - EJA em Canaã dos
+                                            Carajás</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted">3 de fevereiro de 2022</small>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start">
+                            <img src="{% static 'assets/dist/img/exame_suplencia.png' %}" alt="Exame de Suplência"
+                                class="me-3" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <a href="#"
+                                    class="text-white text-decoration-none" target="_blank">
+                                    <p style="text-align: justify;">
+                                        <strong>Abertas as inscrições para Exame de Suplência do Ensino
+                                            Fundamental</strong>
+                                    </p>
+                                </a>
+                                <small class="d-block text-muted">1 de março de 2023</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Temas Mais Acessados -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-uppercase text-success mb-4">Temas Mais Acessados</h5>
+                    <div class="d-flex flex-wrap align-items-baseline">
+                        <span class="badge bg-primary m-1">Educação <span
+                                class="badge bg-light text-dark ms-1">243</span></span>
+                        <span class="badge bg-primary m-1">Destaque <span
+                                class="badge bg-light text-dark ms-1">234</span></span>
+                        <span class="badge bg-primary m-1">Ensino Superior <span
+                                class="badge bg-light text-dark ms-1">58</span></span>
+                        <span class="badge bg-primary m-1">Polo Educacional <span
+                                class="badge bg-light text-dark ms-1">42</span></span>
+                        <span class="badge bg-primary m-1">Ensino Infantil <span
+                                class="badge bg-light text-dark ms-1">42</span></span>
+                        <span class="badge bg-primary m-1">Jovens e Adultos <span
+                                class="badge bg-light text-dark ms-1">37</span></span>
+                        <span class="badge bg-primary m-1">Cultura <span
+                                class="badge bg-light text-dark ms-1">36</span></span>
+                        <span class="badge bg-primary m-1">Ensino Integral <span
+                                class="badge bg-light text-dark ms-1">27</span></span>
+                        <span class="badge bg-primary m-1">Governo <span
+                                class="badge bg-light text-dark ms-1">26</span></span>
+                        <span class="badge bg-primary m-1">Esportes <span
+                                class="badge bg-light text-dark ms-1">19</span></span>
+                        <span class="badge bg-primary m-1">Saúde Escolar <span
+                                class="badge bg-light text-dark ms-1">15</span></span>
+                        <span class="badge bg-primary m-1">Inclusão Digital <span
+                                class="badge bg-light text-dark ms-1">12</span></span>
+                    </div>
+                </div>
+            </div>
+            <!-- Linha inferior -->
+            <hr class="border-secondary">
+            <div class="row align-items-center">
+                <!-- Logo -->
+                <div class="col-md-4 mb-4 mb-md-0 d-flex justify-content-center align-items-center">
+                    <img src="{% static 'assets/dist/img/logoSite2.png' %}" alt="Logo SEMED"
+                        style="width: 150px; height: 150px; object-fit: contain;">
+                </div>
+
+                <!-- Informações de Contato -->
+                <div class="col-md-4 mb-4 mb-md-0 text-center">
+                    <p style="text-align: justify;">
+                        <strong>Horário de funcionamento:</strong> de 08:00 às 12:00 (atendimento ao público) e das
+                        14:00 às 18:00 (expediente interno).
+                    </p>
+                    <p style="text-align: justify;">
+                        <strong>Contato:</strong> <a href="mailto:assec@semedcanaadoscarajas.pa.gov.br"
+                            class="text-warning text-decoration-none">assec@semedcanaadoscarajas.pa.gov.br</a>
+                    </p>
+                </div>
+                <!-- Redes Sociais -->
+                <div class="col-md-4 text-center text-md-end">
+                    <h5 class="text-uppercase text-info mb-3">Acompanhe Nossas Redes</h5>
+                    <a href="https://www.facebook.com/semedcanaadoscarajas/" class="text-white me-3" target="_blank"
+                        style="text-decoration: none;">
+                        <i class="fab fa-facebook fa-2x"></i>
+                    </a>
+                    <a href="https://www.instagram.com/semedcanaadoscarajas/" class="text-white me-3" target="_blank"
+                        style="text-decoration: none;">
+                        <i class="fab fa-instagram fa-2x"></i>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UC-_-paASaztXO8yJRLxT32A/" class="text-white me-3"
+                        target="_blank">
+                        <i class="fab fa-youtube fa-2x"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+            <!-- jQuery (sempre primeiro) -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            
+            <!-- jQuery Mask Plugin (depende do jQuery) -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+            
+            <!-- Select2 (também depende do jQuery) -->
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            
+            <!-- Bootstrap JS (bundle inclui popper.js) -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+            
+            <!-- Chart.js -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            
+            <!-- Custom Scripts (após tudo que ele depende) -->
+            <script src="{% static 'assets/dist/js/search.js' %}"></script>
+            
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    fetch("/disciplinas-json/")
+                        .then(response => response.json())
+                        .then(data => {
+                            const container = document.getElementById("container-disciplinas");
+                            if (!data.length) {
+                                container.innerHTML = '<p class="text-danger">Nenhuma disciplina cadastrada.</p>';
+                                return;
+                            }
+
+                            let rowDiv = document.createElement("div");
+                            rowDiv.className = "row";
+
+                            data.forEach((disc, index) => {
+                                const colDiv = document.createElement("div");
+                                colDiv.className = "col-md-6";
+                                colDiv.innerHTML = `
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="disciplina_${index}"
+                                                       name="disciplinas[]"
+                                                       value="${disc.nome}">
+                                                <label class="form-check-label" for="disciplina_${index}">
+                                                    ${disc.nome}
+                                                </label>
+                                            </div>
+                                        `;
+                                rowDiv.appendChild(colDiv);
+
+                                // Quebra de linha após cada dois itens
+                                if ((index + 1) % 2 === 0 && index !== data.length - 1) {
+                                    container.appendChild(rowDiv);
+                                    rowDiv = document.createElement("div");
+                                    rowDiv.className = "row";
+                                }
+                            });
+
+                            container.appendChild(rowDiv);
+                        });
+                });
+            </script>
+            
+            <!-- <script>
+                            function toggleDisciplinas() {
+                                const grupo = document.getElementById('grupo_disciplinas');
+                                const opcaoNao = document.getElementById('prova_todas_disciplinas_nao');
+                                grupo.style.display = opcaoNao.checked ? 'block' : 'none';
+                            }
+                            document.addEventListener('DOMContentLoaded', toggleDisciplinas);
+                        </script> -->
+            
+            
+            <!-- Verificação CPF via AJAX -->
+            <script>
+                $(document).ready(function () {
+                    $('#verificarCpfBtn').click(function () {
+                        var cpf = $('#cpf_candidato_modal').val();
+                        console.log("CPF inserido: " + cpf);
+
+                        $.ajax({
+                            url: "{% url 'verificar_cpf_ajax' %}",
+                            type: "POST",
+                            data: {
+                                'cpf': cpf,
+                                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                            },
+                            success: function (response) {
+                                console.log("Resposta recebida:", response);
+
+                                $('#cpf').val(''); // Limpa o campo CPF (se necessário)
+
+                                if (response.status === 'existe') {
+                                    $('#verificarCpfModal').modal('hide');  // Fecha o modal atual
+                                    setTimeout(function () {
+                                        $('#cpfExisteModal').modal('show'); // Mostra aviso
+                                    }, 300);
+                                } else if (response.status === 'nao_existe' || response.existe === false) {
+                                    $('#cpf_form').val(cpf).prop('readonly', true);
+                                    $('#cadastroModal').modal('show');
+                                    $('#verificarCpfModal').modal('hide');
+                                } else {
+                                    console.warn("Status inesperado:", response.status);
+                                    alert("Erro ao verificar o CPF. Tente novamente.");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Erro na requisição AJAX:", error);
+                                $('#cpf').val('');
+                                alert("Erro na verificação do CPF.");
+                            }
+                        });
+                    });
+
+                    // Quando o usuário confirmar o aviso de CPF existente
+                    $('#confirmarRedirecionamentoBtn').click(function () {
+                        window.location.href = "{% url 'login_candidato' %}";
+                    });
+                });
+            </script>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const sim = document.getElementById('fez_exame_sim');
+                    const nao = document.getElementById('fez_exame_nao');
+                    const anoDiv = document.getElementById('ano_ultima_prova_div');
+
+                    function toggleAno() {
+                        anoDiv.style.display = sim.checked ? 'block' : 'none';
+                    }
+
+                    if (sim && nao) {
+                        sim.addEventListener('change', toggleAno);
+                        nao.addEventListener('change', toggleAno);
+                        toggleAno(); // Executa ao carregar
+                    }
+                });
+            </script>
+            
+            <script>
+                function searchSchools() {
+                    const address = document.getElementById('address-input').value;
+                    const neighborhood = document.getElementById('neighborhood-input').value;
+                    const cep = document.getElementById('cep-input').value;
+
+                    const queryString = new URLSearchParams({ address, neighborhood, cep }).toString();
+
+                    fetch(`/search-schools/?${queryString}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const resultsDiv = document.getElementById('school-results');
+                            resultsDiv.innerHTML = '';
+
+                            if (data.schools.length > 0) {
+                                data.schools.forEach(school => {
+                                    const schoolItem = document.createElement('div');
+                                    schoolItem.classList.add('school-item');
+                                    schoolItem.innerHTML = `<p><strong>${school.name}</strong> - ${school.neighborhood} - ${school.address} - CEP: ${school.cep}</p>`;
+                                    resultsDiv.appendChild(schoolItem);
+                                });
+                            } else {
+                                resultsDiv.innerHTML = '<p>Nenhuma escola encontrada para os critérios informados.</p>';
+                            }
+                        })
+                        .catch(error => console.error('Erro:', error));
+                }
+            </script>
+            
+            <!-- Script to handle the timer -->
+            <script>
+                // Function to start the 20-minute countdown
+                function startTimer(duration, display) {
+                    let timer = duration, minutes, seconds;
+                    const interval = setInterval(function () {
+                        minutes = parseInt(timer / 60, 10);
+                        seconds = parseInt(timer % 60, 10);
+
+                        minutes = minutes < 10 ? "0" + minutes : minutes;
+                        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                        display.textContent = minutes + ":" + seconds;
+
+                        if (--timer < 0) {
+                            clearInterval(interval); // Clear the interval when the time runs out
+                            $('#cadastroModal').modal('hide'); // Close the modal
+                            alert('O tempo para o preenchimento do cadastro expirou.'); // Optional: alert the user
+                        }
+                    }, 1000);
+                }
+
+                // When the modal is shown, start the timer
+                $('#cadastroModal').on('shown.bs.modal', function () {
+                    const twentyMinutes = 60 * 20, // 20 minutes in seconds
+                        display = document.querySelector('#timer');
+                    startTimer(twentyMinutes, display);
+                });
+
+            </script>
+            
+            <!-- Script to insert current date -->
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Function to format the date
+                    function formatDate(date) {
+                        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                        return date.toLocaleDateString('pt-BR', options);
+                    }
+
+                    // Get the current date and format it
+                    const currentDate = new Date();
+                    document.getElementById("currentDate").textContent = formatDate(currentDate);
+                });
+            </script>
+            
+            <script>
+                function searchBairro() {
+                    const bairroInput = document.getElementById('bairro').value;
+
+                    if (bairroInput.length > 2) { // Start searching when more than 2 characters are typed
+                        fetch(`/search-bairro/?query=${bairroInput}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const resultsDiv = document.getElementById('bairro-results');
+                                resultsDiv.innerHTML = ''; // Clear previous results
+
+                                if (data.results.length > 0) {
+                                    data.results.forEach(bairro => {
+                                        const item = document.createElement('div');
+                                        item.textContent = `${bairro.logradouro_nome} - ${bairro.bairro_distrito} (CEP: ${bairro.cep})`;
+                                        resultsDiv.appendChild(item);
+                                    });
+                                } else {
+                                    resultsDiv.innerHTML = '<p>Nenhum bairro encontrado.</p>';
+                                }
+                            })
+                            .catch(error => console.error('Erro:', error));
+                    }
+                }
+
+            </script>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    fetch('/get-bairros/')  // URL pointing to your Django view
+                        .then(response => response.json())
+                        .then(data => {
+                            const bairroSelect = document.getElementById('bairro');
+                            data.bairros.forEach(bairro => {
+                                const option = document.createElement('option');
+                                option.value = bairro.id;
+                                option.text = `${bairro.bairro_distrito}`;
+                                bairroSelect.appendChild(option);
+                            });
+                        })
+                        .catch(error => console.error('Erro ao buscar os bairros:', error));
+                });
+
+            </script>
+            
+            <script>
+                function toggleSpecialNeeds(isEnabled) {
+                    const selectField = document.getElementById('necessidade_especial_detalhe');
+
+                    if (isEnabled) {
+                        selectField.removeAttribute('disabled');
+                    } else {
+                        selectField.setAttribute('disabled', true);
+                        selectField.value = ''; // Clear the select field when disabled
+                    }
+                }
+
+                // By default, the "Não" option will disable the select field when the page loads
+                window.onload = function () {
+                    toggleSpecialNeeds(false);
+                };
+            </script>
+            
+            <script>
+                $(document).ready(function () {
+                    $('#disciplinas').select2({
+                        placeholder: "Selecione as disciplinas",
+                        allowClear: true,
+                        closeOnSelect: false // Keep the dropdown open after selecting an item
+                    }).on('change', function () {
+                        // Hide all selected options except the first one
+                        var selectedOptions = $(this).find('option:selected');
+
+                        // Hide all selected choices, except the first
+                        selectedOptions.each(function (index) {
+                            if (index > 0) {
+                                $(this).attr('data-hidden', true); // Mark as hidden
+                            } else {
+                                $(this).removeAttr('data-hidden'); // Keep the first visible
+                            }
+                        });
+
+                        // Refresh the display of the select field
+                        $(this).trigger('change.select2');
+                    });
+
+                    // Custom format to hide elements marked as hidden
+                    function formatState(state) {
+                        if (!state.id) {
+                            return state.text; // optgroup
+                        }
+                        // If the option is marked as hidden, do not display it
+                        if ($(state.element).attr('data-hidden')) {
+                            return null;
+                        }
+                        return state.text;
+                    }
+
+                    $('#disciplinas').select2({
+                        templateResult: formatState
+                    });
+                });
+            </script>
+            
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const grupo = document.getElementById('grupo_disciplinas');
+                    const opcaoSim = document.getElementById('prova_todas_disciplinas_sim');
+                    const opcaoNao = document.getElementById('prova_todas_disciplinas_nao');
+
+                    function toggleDisciplinas() {
+                        const checkboxes = document.querySelectorAll('#container-disciplinas .form-check-input');
+
+                        if (opcaoSim.checked) {
+                            grupo.style.display = 'block';
+                            checkboxes.forEach(cb => {
+                                cb.checked = true;
+                                cb.disabled = true;
+                            });
+                        } else {
+                            grupo.style.display = 'block';
+                            checkboxes.forEach(cb => {
+                                cb.checked = false;
+                                cb.disabled = false;
+                            });
+                        }
+                    }
+
+                    opcaoSim.addEventListener('change', toggleDisciplinas);
+                    opcaoNao.addEventListener('change', toggleDisciplinas);
+
+                    toggleDisciplinas(); // Executa ao carregar
+                });
+            </script>
+            
+            
+            <script>
+                document.getElementById('termos_condicoes').addEventListener('change', function () {
+                    const submitButton = document.getElementById('submitButton');
+                    if (this.checked) {
+                        submitButton.disabled = false;
+                    } else {
+                        submitButton.disabled = true;
+                    }
+                });
+
+                document.getElementById('cadastroForm').addEventListener('submit', function (event) {
+                    const termosCondicoesCheckbox = document.getElementById('termos_condicoes');
+                    if (!termosCondicoesCheckbox.checked) {
+                        event.preventDefault();  // Prevent form submission
+                        termosCondicoesCheckbox.focus();  // Focus on the checkbox
+                    }
+                });
+            </script>
+            
+            <!-- JavaScript Senha-->
+            <script>
+                function togglePassword(inputId, eyeIconId) {
+                    var input = document.getElementById(inputId);
+                    var eyeIcon = document.getElementById(eyeIconId);
+
+                    if (input.type === "password") {
+                        input.type = "text";
+                        eyeIcon.classList.remove("fa-eye");
+                        eyeIcon.classList.add("fa-eye-slash");
+                    } else {
+                        input.type = "password";
+                        eyeIcon.classList.remove("fa-eye-slash");
+                        eyeIcon.classList.add("fa-eye");
+                    }
+                }
+            </script>
+            
+            <script>
+                let modalMostrada = false;
+
+                function verificarIdade() {
+                    const inputNascimento = document.getElementById('data_nascimento');
+                    const dataNascimento = new Date(inputNascimento.value);
+                    const dataLimite = new Date('2025-10-19');
+
+                    const radioSim = document.getElementById('maior_de_18_sim');
+                    const radioNao = document.getElementById('maior_de_18_nao');
+                    const form = document.getElementById('cadastroForm');
+
+                    if (isNaN(dataNascimento.getTime())) {
+                        alert("Por favor, insira uma data de nascimento válida.");
+                        radioSim.disabled = true;
+                        radioNao.disabled = true;
+                        return;
+                    }
+
+                    let idade = dataLimite.getFullYear() - dataNascimento.getFullYear();
+                    const mes = dataLimite.getMonth() - dataNascimento.getMonth();
+                    const dia = dataLimite.getDate() - dataNascimento.getDate();
+                    if (mes < 0 || (mes === 0 && dia < 0)) idade--;
+
+                    if (idade >= 15 && idade < 18) {
+                        // 15 a 17 anos
+                        radioSim.disabled = true;
+                        radioNao.disabled = false;
+                        radioNao.checked = true;
+
+                        document.getElementById('nome_responsavel').disabled = false;
+                        document.getElementById('cpf_responsavel').disabled = false;
+                        document.getElementById('rg_responsavel').disabled = false;
+                        document.getElementById('tipo_responsavel').disabled = false;
+
+                        [...form.elements].forEach(el => {
+                            if (!document.getElementById('idadeModal').contains(el)) {
+                                el.disabled = false;
+                            }
+                        });
+
+                        modalMostrada = false;
+
+                    } else if (idade >= 18) {
+                        // 18 ou mais
+                        radioSim.disabled = false;
+                        radioNao.disabled = false;
+                        radioSim.checked = true;
+
+                        document.getElementById('nome_responsavel').disabled = true;
+                        document.getElementById('cpf_responsavel').disabled = true;
+                        document.getElementById('rg_responsavel').disabled = true;
+                        document.getElementById('tipo_responsavel').disabled = true;
+
+                        [...form.elements].forEach(el => {
+                            if (!document.getElementById('idadeModal').contains(el)) {
+                                el.disabled = false;
+                            }
+                        });
+
+                        modalMostrada = false;
+
+                    } else {
+                        // menor de 15 anos
+                        if (!modalMostrada) {
+                            const idadeModal = new bootstrap.Modal(document.getElementById('idadeModal'));
+                            idadeModal.show();
+                            modalMostrada = true;
+                        }
+
+                        radioSim.disabled = true;
+                        radioNao.disabled = true;
+                        radioSim.checked = false;
+                        radioNao.checked = false;
+
+                        [...form.elements].forEach(el => {
+                            if (!document.getElementById('idadeModal').contains(el)) {
+                                el.disabled = true;
+                            }
+                        });
+
+                        document.getElementById('fecharBtn').disabled = false;
+                    }
+                }
+            </script>
+            
+            <script>
+                function fecharModalIdade() {
+                    const modalEl = document.getElementById('idadeModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                    modalMostrada = false;
+                }
+
+
+            </script>
+            
+            <script>
+                document.getElementById('verifyCpfBtn').addEventListener('click', function () {
+                    var btn = this;
+                    btn.disabled = true;
+                    btn.innerText = 'Processando...';
+
+                    // Aguarda 5 segundos antes de prosseguir com o fetch
+                    setTimeout(function () {
+                        var cpf = document.getElementById('cpf_admin').value;
+                        var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                        fetch('/verificar-cpf-admin/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'X-CSRFToken': csrfToken
+                            },
+                            body: new URLSearchParams({
+                                'cpf': cpf
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    window.location.href = data.redirect_url;
+                                } else {
+                                    document.getElementById('cpfErrorMessage').innerText = data.message || 'Erro ao verificar CPF.';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro:', error);
+                                document.getElementById('cpfErrorMessage').innerText = 'Erro na verificação.';
+                            })
+                            .finally(() => {
+                                btn.disabled = false;
+                                btn.innerText = 'Verificar';
+                            });
+
+                    }, 3000); // Aguarda 3 segundos antes do fetch
+                });
+            </script>
+            
+            {% if messages %}
+            <div class="container">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            </script>
+            
+            <script>
+                function aplicarMascaraCPF(input) {
+                    input.addEventListener("input", function () {
+                        let valor = input.value.replace(/\D/g, "");
+                        if (valor.length > 11) valor = valor.slice(0, 11);
+                        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+                        valor = valor.replace(/(\d{3})(\d)/, "$1.$2");
+                        valor = valor.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+                        input.value = valor;
+                    });
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const cpfCandidato = document.getElementById("cpf_candidato");
+                    const cpfResponsavel = document.getElementById("cpf_responsavel");
+
+                    if (cpfCandidato) aplicarMascaraCPF(cpfCandidato);
+                    if (cpfResponsavel) aplicarMascaraCPF(cpfResponsavel);
+                });
+            </script>
+            
+            <script>
+                function setProcessingState(buttonId) {
+                    const button = document.getElementById(buttonId);
+                    const text = button.querySelector('.btn-text');
+                    const spinner = button.querySelector('.spinner-border');
+
+                    // Desativa o botão e mostra o spinner
+                    button.classList.add('disabled');
+                    text.textContent = 'Processando...';
+                    spinner.classList.remove('d-none');
+                }
+
+                // Aplica a lógica ao clicar
+                document.getElementById('registerButton').addEventListener('click', function () {
+                    setProcessingState('registerButton');
+                    // Obs: este botão abre modal, então pode reativar após um tempo se quiser
+                    setTimeout(() => {
+                        const btn = document.getElementById('registerButton');
+                        btn.classList.remove('disabled');
+                        btn.querySelector('.btn-text').innerHTML = '<i class="fas fa-user-plus me-1"></i> Cadastre-se Agora';
+                        btn.querySelector('.spinner-border').classList.add('d-none');
+                    }, 3000);
+                });
+
+                document.getElementById('loginButton').addEventListener('click', function (e) {
+                    setProcessingState('loginButton');
+                    // deixa seguir o link normalmente após pequena pausa
+                    // ou deixe sem timeout para navegação imediata
+                });
+            </script>
+            
+            <script>
+                function searchSchools() {
+                    const button = document.getElementById("search-button");
+                    const text = button.querySelector(".btn-text");
+                    const spinner = button.querySelector(".spinner-border");
+
+                    // Coleta os valores dos inputs
+                    const endereco = document.getElementById("address-input").value;
+                    const bairro = document.getElementById("neighborhood-input").value;
+                    const cep = document.getElementById("cep-input").value;
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                    // Ativa loading
+                    button.disabled = true;
+                    text.textContent = "Buscando...";
+                    spinner.classList.remove("d-none");
+
+                    // Faz a requisição para a view Django
+                    fetch("{% url 'buscar_escolas' %}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": csrfToken,
+                        },
+                        body: JSON.stringify({
+                            endereco: endereco,
+                            bairro: bairro,
+                            cep: cep
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            const resultsContainer = document.getElementById("school-results");
+                            resultsContainer.innerHTML = "";
+
+                            if (data.escolas.length > 0) {
+                                data.escolas.forEach(escola => {
+                                    resultsContainer.innerHTML += `
+                        <div class="school-card">
+                          <h5>${escola.nome}</h5>
+                          <p>${escola.endereco}, ${escola.bairro} – CEP ${escola.cep}</p>
+                        </div>
+                      `;
+                                });
+                            } else {
+                                resultsContainer.innerHTML = `<div class="alert alert-warning">Nenhuma escola encontrada com os dados informados.</div>`;
+                            }
+
+                            // Reset
+                            button.disabled = false;
+                            text.innerHTML = `<i class="fas fa-search me-1"></i>Buscar`;
+                            spinner.classList.add("d-none");
+                        })
+                        .catch(error => {
+                            console.error("Erro na busca:", error);
+                            document.getElementById("school-results").innerHTML = `
+                    <div class="alert alert-danger">Ocorreu um erro ao buscar as escolas. Tente novamente mais tarde.</div>
+                  `;
+                            button.disabled = false;
+                            text.innerHTML = `<i class="fas fa-search me-1"></i>Buscar`;
+                            spinner.classList.add("d-none");
+                        });
+                }
+            </script>
+            
+            <!-- Script para exibir/ocultar os turnos -->
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const sim = document.getElementById('aulao_sim');
+                    const nao = document.getElementById('aulao_nao');
+                    const camposTurno = document.getElementById('aulao_campos');
+
+                    function toggleTurnos() {
+                        camposTurno.style.display = sim.checked ? 'block' : 'none';
+                    }
+
+                    sim.addEventListener('change', toggleTurnos);
+                    nao.addEventListener('change', toggleTurnos);
+
+                    // Executa ao carregar a página
+                    toggleTurnos();
+                });
+            </script>
+            
+            
+     </body>
+            
+</html>

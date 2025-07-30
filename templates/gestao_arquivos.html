@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Arquivos</title>
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .custom-card {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .custom-card .inner {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .custom-card .icon {
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+        .custom-table th, .custom-table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .filter-card {
+            background: #f4f6f9;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .btn {
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    {% include 'navbar.html' %}
+    {% include 'sidebar.html' %}
+
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Gestão de Arquivos</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="custom-card">
+                            <div class="inner">
+                                {{ total_registros }}
+                                <p>Total de Registros</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-database"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="custom-card" style="background: linear-gradient(135deg, #1d976c, #93f9b9);">
+                            <div class="inner">
+                                {{ concluintes }}
+                                <p>Concluintes</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-user-graduate"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="custom-card" style="background: linear-gradient(135deg, #ff416c, #ff4b2b);">
+                            <div class="inner">
+                                {{ nao_concluintes }}
+                                <p>Não Concluintes</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-user-times"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="custom-card" style="background: linear-gradient(135deg, #f7971e, #ffd200);">
+                            <div class="inner">
+                                {{ parcialmente_concluintes|default:"0" }}
+                                <p>Parcialmente</p>
+                            </div>
+                            <div class="icon"><i class="fas fa-user-check"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="filter-card">
+                    <form method="get" class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                        <label for="status" class="form-label fw-bold text-muted">Status do Aluno</label>
+                        <select name="status" id="status" class="form-control">
+                            <option value="">Todos</option>
+                            <option value="aprovado" {% if status == 'aprovado' %}selected{% endif %}>Aprovado</option>
+                            <option value="reprovado" {% if status == 'reprovado' %}selected{% endif %}>Reprovado</option>
+                            <option value="concluinte" {% if status == 'concluinte' %}selected{% endif %}>Concluinte</option>
+                        </select>
+                        </div>
+
+                        <div class="col-md-3">
+                        <label for="ano_exame" class="form-label">Ano do Exame</label>
+                        <select name="ano_exame" id="ano_exame" class="form-control">
+                            <option value="">Todos os Anos</option>
+                            {% for ano in anos_disponiveis %}
+                            <option value="{{ ano }}" {% if ano|stringformat:"s" == ano_exame %}selected{% endif %}>{{ ano }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+
+                        <div class="col-md-4">
+                        <label for="busca_nome" class="form-label">Buscar por Nome</label>
+                        <input type="text" name="busca_nome" id="busca_nome" class="form-control" placeholder="Digite o nome"
+                                value="{{ busca_nome|default_if_none:'' }}">
+                        </div>
+
+                        <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 mt-2">
+                            <i class="fas fa-filter me-1"></i> Filtrar
+                        </button>
+                        </div>
+                    </form>
+                </div>
+
+
+                
+
+                <div class="card">
+                    <div class="card-header bg-dark text-white">
+                        <h3 class="card-title">Lista de Registros</h3>
+                    </div>
+                    <div class="card-body table-responsive p-0">
+                        <table class="table table-bordered table-hover custom-table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nome</th>
+                                    <th>CPF</th>
+                                    <th>Status</th>
+                                    <th>Reinscrito</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for registro in registros %}
+                                <tr>
+                                    <td>{{ registro.id }}</td>
+                                    <td>{{ registro.nome }}</td>
+                                    <td>{{ registro.cpf }}</td>
+                                    <td>
+                                        {% if registro.status == 'parcial' %}<span class="badge bg-success">Aprovado Parcialmente</span>{% endif %}
+                                        {% if registro.status == 'reprovado' %}<span class="badge bg-danger">Reprovado</span>{% endif %}
+                                        {% if registro.status == 'concluinte' %}<span class="badge bg-primary">Concluinte</span>{% endif %}
+                                    </td>
+                                    <td>
+                                        {% if registro.reinscrito %}
+                                            <span class="badge bg-success text-white">Sim</span>
+                                        {% else %}
+                                            <span class="badge bg-danger text-white">Não</span>
+                                        {% endif %}
+                                    </td>
+
+
+
+                                    <td>
+                                        <a href="{% url 'editar_registro' registro.id %}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                        <a href="{% url 'excluir_registro' registro.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')"><i class="fas fa-trash"></i></a>
+                                        {% if registro.status == "concluinte" %}
+                                        <a href="{% url 'emitir_certificado' registro.id %}" class="btn btn-sm btn-primary" title="Emitir Certificado">
+                                            <i class="fas fa-file-alt"></i>
+                                        </a>
+                                            <button class="btn btn-sm btn-warning" title="Emitir Atestado" onclick="openAtestadoModal(this)" data-id="{{ registro.id }}">
+                                                <i class="fas fa-file-signature"></i>
+                                            </button>
+                                        {% endif %}
+
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6" class="text-muted text-center">Nenhum registro encontrado.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {% include 'footer.html' %}
+</div>
+
+    
+
+
+    <!-- Modal para coleta de dados -->
+    <div class="modal fade" id="atestadoModal" tabindex="-1" aria-labelledby="atestadoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="atestadoModalLabel">Informações para Atestado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="atestadoForm" method="post">
+                        {% csrf_token %}
+                        <!-- Form Fields -->
+                        <div class="mb-3">
+                            <label for="rg" class="form-label">RG</label>
+                            <input type="text" class="form-control" id="rg" name="rg" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                            <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cidadeNascimento" class="form-label">Cidade de Nascimento</label>
+                            <input type="text" class="form-control" id="cidadeNascimento" name="cidadeNascimento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nomePai" class="form-label">Nome do Pai</label>
+                            <input type="text" class="form-control" id="nomePai" name="nomePai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nomeMae" class="form-label">Nome da Mãe</label>
+                            <input type="text" class="form-control" id="nomeMae" name="nomeMae" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" id="generateAtestado">Gerar Atestado</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+<!-- Scripts -->
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+
+
+<script>
+    function openAtestadoModal(button) {
+    const registroId = button.getAttribute('data-id');
+    const modalElement = document.getElementById('atestadoModal');
+    modalElement.setAttribute('data-id', registroId);
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+}
+</script>
+
+
+<script>
+    // Função para abrir a modal e passar o ID do registro
+    function openAtestadoModal(button) {
+        const registroId = button.getAttribute('data-id');
+        document.getElementById('atestadoModal').setAttribute('data-id', registroId);
+        const modal = new bootstrap.Modal(document.getElementById('atestadoModal'));
+        modal.show();
+    }
+
+    // Gerar o atestado via AJAX
+    document.getElementById('generateAtestado').addEventListener('click', function () {
+    const formData = new FormData(document.getElementById('atestadoForm'));
+    const registroId = document.getElementById('atestadoModal').getAttribute('data-id');
+
+        fetch(`/gerar-atestado/${registroId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        } else {
+            throw new Error('Erro ao gerar o atestado.');
+        }
+    })
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'atestado.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        alert(error.message);
+    });
+});
+
+</script>
+
+</body>
+</html>

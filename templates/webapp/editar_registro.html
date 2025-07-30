@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Registro</title>
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <style>
+        .content-header {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .form-section {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1d976c, #93f9b9);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d976c, #6dd5ed);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            border: none;
+        }
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #ff4b2b, #ff6f61);
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        {% include 'navbar.html' %}
+        {% include 'sidebar.html' %}
+        <div class="content-wrapper">
+            <div class="content-header">
+                <h1 class="text-center">Editar Registro</h1>
+            </div>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="form-section">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="ano_exame">Ano do Exame:</label>
+                                        <input type="number" id="ano_exame" name="ano_exame" class="form-control" value="{{ registro.ano_exame }}" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="nome">Nome:</label>
+                                        <input type="text" id="nome" name="nome" class="form-control" value="{{ registro.nome }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cpf">CPF:</label>
+                                        <input type="text" id="cpf" name="cpf" class="form-control" value="{{ registro.cpf }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="portugues">Nota Português:</label>
+                                        <input type="number" step="0.01" id="portugues" name="portugues" class="form-control" value="{{ registro.portugues }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="redacao">Nota Redação:</label>
+                                        <input type="number" step="0.01" id="redacao" name="redacao" class="form-control" value="{{ registro.redacao }}" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="media_ling">Média Ling.:</label>
+                                        <input type="number" step="0.01" id="media_ling" name="media_ling" class="form-control" value="{{ registro.media_ling }}" readonly>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="ingles">Nota Inglês:</label>
+                                        <input type="number" step="0.01" id="ingles" name="ingles" class="form-control" value="{{ registro.ingles }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="arte">Nota Arte:</label>
+                                        <input type="number" step="0.01" id="arte" name="arte" class="form-control" value="{{ registro.arte }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ed_fisica">Nota Educação Física:</label>
+                                        <input type="number" step="0.01" id="ed_fisica" name="ed_fisica" class="form-control" value="{{ registro.ed_fisica }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="historia">Nota História:</label>
+                                        <input type="number" step="0.01" id="historia" name="historia" class="form-control" value="{{ registro.historia }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="geografia">Nota Geografia:</label>
+                                        <input type="number" step="0.01" id="geografia" name="geografia" class="form-control" value="{{ registro.geografia }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="matematica">Nota Matemática:</label>
+                                        <input type="number" step="0.01" id="matematica" name="matematica" class="form-control" value="{{ registro.matematica }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ciencias">Nota Ciências:</label>
+                                        <input type="number" step="0.01" id="ciencias" name="ciencias" class="form-control" value="{{ registro.ciencias }}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="observacao">Observação:</label>
+                                        <textarea id="observacao" name="observacao" class="form-control">{{ registro.observacao }}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Status:</label>
+                                        <select id="status" name="status" class="form-control">
+                                            <option value="aprovado" {% if registro.status == "aprovado" %}selected{% endif %}>Aprovado</option>
+                                            <option value="reprovado" {% if registro.status == "reprovado" %}selected{% endif %}>Reprovado</option>
+                                            <option value="concluinte" {% if registro.status == "concluinte" %}selected{% endif %}>Concluinte</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="materias_aprovadas">Matérias Aprovadas:</label>
+                                        <textarea id="materias_aprovadas" name="materias_aprovadas" class="form-control" readonly>{{ registro.materias_aprovadas }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+                                <a href="{% url 'gestao_arquivos' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% include 'footer.html' %}
+    </div>
+
+     <!-- Modal de Sucesso -->
+     <div id="successModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="successModalLabel">Sucesso</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    O registro foi atualizado com sucesso!.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const portuguesInput = document.getElementById('portugues');
+            const redacaoInput = document.getElementById('redacao');
+            const mediaLingInput = document.getElementById('media_ling');
+    
+            const calculateMediaLing = () => {
+                const portugues = parseFloat(portuguesInput.value) || 0;
+                const redacao = parseFloat(redacaoInput.value) || 0;
+                mediaLingInput.value = ((portugues + redacao) / 2).toFixed(2);
+            };
+    
+            portuguesInput.addEventListener('input', calculateMediaLing);
+            redacaoInput.addEventListener('input', calculateMediaLing);
+    
+            // Exibe a modal de sucesso automaticamente e redireciona após 3 segundos
+            const sucesso = {{ sucesso|yesno:"true,false" }};
+            if (sucesso) {
+                $('#successModal').modal('show');
+                setTimeout(() => {
+                    window.location.href = "{% url 'gestao_arquivos' %}";
+                }, 3000); // Redireciona após 3 segundos
+            }
+        });
+    </script>
+    
+    
+    
+
+
+</body>
+</html>

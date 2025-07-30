@@ -1,0 +1,180 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{% url 'dashboard_eja' %}" class="brand-link">
+        <img src="{% static 'assets/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+            class="brand-image img-circle elevation-3" style="opacity: 0.8" />
+        <span class="brand-text font-weight-light">SEMED GESTÃO</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- User Panel -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'assets/dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image" />
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ request.user.username }}</a>
+            </div>
+        </div>
+
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+                <!-- SAMACC Section -->
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link active">
+                        <i class="nav-icon fas fa-book"></i>
+                        <p>SAMACC <i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <!-- Professores -->
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-user-tie"></i>
+                                <p>Professor <i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'lingua_portuguesa_prof_view' %}" class="nav-link">
+                                        <i class="nav-icon fas fa-book"></i>
+                                        <p>Português Professor</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{% url 'lingua_matematica_prof_view' %}" class="nav-link">
+                                        <i class="nav-icon fas fa-book"></i>
+                                        <p>Matemática Professor</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- EJA Section -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-graduation-cap"></i>
+                        <p>EJA <i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'upload_exame' %}" class="nav-link">
+                                <i class="nav-icon fas fa-upload"></i>
+                                <p>Upload de Arquivo</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'gestao_arquivos' %}" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>Gestão de Arquivos</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{% url 'alunos_eja' %}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Gestão de Alunos EJA</p>
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a href="{% url 'relatorios_eja' %}" class="nav-link">
+                                <i class="nav-icon fas fa-chart-bar"></i>
+                                <p>Relatórios</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <!-- Aluno Section -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-graduate"></i>
+                        <p>Aluno <i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'aluno_portugues_view' %}" class="nav-link">
+                                <i class="nav-icon fas fa-book-reader"></i>
+                                <p>Português Aluno</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'matematica_aluno_view' %}" class="nav-link">
+                                <i class="nav-icon fas fa-calculator"></i>
+                                <p>Matemática Aluno</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Habilidades Section -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-brain"></i>
+                        <p>Habilidades <i class="right fas fa-angle-left"></i></p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'habilidades_portugues_view' %}" class="nav-link">
+                                <i class="fas fa-book-open"></i>
+                                <p>Português 5º e 9º</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'habilidades_matematica_view' %}" class="nav-link">
+                                <i class="fas fa-calculator"></i>
+                                <p>Matemática 5º e 9º</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Ajuda -->
+                <li class="nav-item">
+                    <a href="{% url 'ajuda_view' %}" class="nav-link">
+                        <i class="fas fa-question-circle"></i>
+                        <p>Ajuda</p>
+                    </a>
+                </li>
+
+                <!-- Segurança -->
+                <li class="nav-item">
+                    <a href="{% url 'seguranca_view' %}" class="nav-link">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Segurança</p>
+                    </a>
+                </li>
+
+                <!-- Logout -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

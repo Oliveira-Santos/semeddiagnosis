@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3><i class="fas fa-edit text-warning"></i> Editar Aluno</h3>
+  <form method="post">
+    {% csrf_token %}
+
+    <!-- Dados Pessoais -->
+    <h5 class="mt-4">Dados Pessoais</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Nome</label>
+        <input type="text" name="nome" class="form-control" value="{{ aluno.nome }}">
+      </div>
+      <div class="col-md-3">
+        <label>CPF</label>
+        <input type="text" name="cpf" class="form-control" value="{{ aluno.cpf }}">
+      </div>
+      <div class="col-md-3">
+        <label>Data de Nascimento</label>
+        <input type="date" name="data_nascimento" class="form-control" value="{{ aluno.data_nascimento|date:'Y-m-d' }}">
+      </div>
+    </div>
+
+    <!-- Contato -->
+    <h5 class="mt-4">Contato</h5>
+    <div class="row">
+      <div class="col-md-4">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value="{{ aluno.email }}">
+      </div>
+      <div class="col-md-4">
+        <label>Telefone</label>
+        <input type="text" name="telefone" class="form-control" value="{{ aluno.telefone }}">
+      </div>
+      <div class="col-md-4">
+        <label>Telefone 2</label>
+        <input type="text" name="telefone_2" class="form-control" value="{{ aluno.telefone_2 }}">
+      </div>
+    </div>
+
+    <!-- Endereço -->
+    <h5 class="mt-4">Endereço</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Endereço</label>
+        <input type="text" name="endereco" class="form-control" value="{{ aluno.endereco }}">
+      </div>
+      <div class="col-md-3">
+        <label>Bairro</label>
+        <input type="text" name="bairro" class="form-control" value="{{ aluno.bairro }}">
+      </div>
+      <div class="col-md-3">
+        <label>Cidade</label>
+        <input type="text" name="cidade" class="form-control" value="{{ aluno.cidade }}">
+      </div>
+    </div>
+
+    <!-- Responsável -->
+    <h5 class="mt-4">Responsável</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Nome do Responsável</label>
+        <input type="text" name="nome_responsavel" class="form-control" value="{{ aluno.nome_responsavel }}">
+      </div>
+      <div class="col-md-3">
+        <label>CPF do Responsável</label>
+        <input type="text" name="cpf_responsavel" class="form-control" value="{{ aluno.cpf_responsavel }}">
+      </div>
+      <div class="col-md-3">
+        <label>RG do Responsável</label>
+        <input type="text" name="rg_responsavel" class="form-control" value="{{ aluno.rg_responsavel }}">
+      </div>
+    </div>
+
+    <!-- Prova e Escolaridade -->
+    <h5 class="mt-4">Dados do Exame</h5>
+    <div class="row">
+      <div class="col-md-3">
+        <label>Ano do Exame</label>
+        <input type="number" name="ano_exame" class="form-control" value="{{ aluno.ano_exame }}">
+      </div>
+      <div class="col-md-3">
+        <label>Fez Exame Supletivo</label>
+        <input type="text" name="fez_exame_supletivo" class="form-control" value="{{ aluno.fez_exame_supletivo }}">
+      </div>
+      <div class="col-md-3">
+        <label>Prova de Todas as Disciplinas</label>
+        <input type="text" name="prova_todas_disciplinas" class="form-control" value="{{ aluno.prova_todas_disciplinas }}">
+      </div>
+      <div class="col-md-3">
+        <label>Escola</label>
+        <input type="text" name="escola_2024" class="form-control" value="{{ aluno.escola_2024 }}">
+      </div>
+    </div>
+
+    <!-- Notas -->
+    <h5 class="mt-4">Notas por Disciplina</h5>
+    <div class="row">
+      {% for campo in 'portugues redacao ingles arte ed_fisica historia geografia matematica ciencias'.split %}
+      <div class="col-md-3">
+        <label>{{ campo|title|replace:"_"," " }}</label>
+        <input type="number" step="0.01" name="{{ campo }}" class="form-control" value="{{ aluno|attr:campo }}">
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Necessidades e Observações -->
+    <h5 class="mt-4">Informações Adicionais</h5>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Possui Necessidade Especial</label>
+        <input type="text" name="possui_necessidade_especial" class="form-control" value="{{ aluno.possui_necessidade_especial }}">
+      </div>
+      <div class="col-md-6">
+        <label>Detalhes da Necessidade</label>
+        <input type="text" name="necessidade_especial_detalhe" class="form-control" value="{{ aluno.necessidade_especial_detalhe }}">
+      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <label>Observações</label>
+      <textarea name="observacao" class="form-control">{{ aluno.observacao }}</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-4">
+      <i class="fas fa-save"></i> Salvar Alterações
+    </button>
+    <a href="{% url 'visualizar_aluno' aluno.id %}" class="btn btn-secondary mt-4 ml-2">
+      Cancelar
+    </a>
+  </form>
+</div>
+{% endblock %}

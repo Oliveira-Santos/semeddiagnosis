@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Editar Dados do Candidato</h4>
+    </div>
+    <div class="card-body">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nome Completo</label>
+            <input type="text" name="nome" class="form-control" value="{{ candidato.nome }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">CPF</label>
+            <input type="text" name="cpf" class="form-control" value="{{ candidato.cpf }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Data de Nascimento</label>
+            <input type="date" name="data_nascimento" class="form-control" value="{{ candidato.data_nascimento|date:'Y-m-d' }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="{{ candidato.email }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone</label>
+            <input type="text" name="telefone" class="form-control" value="{{ candidato.telefone }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefone 2</label>
+            <input type="text" name="telefone_2" class="form-control" value="{{ candidato.telefone_2 }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Endereço</label>
+            <input type="text" name="endereco" class="form-control" value="{{ candidato.endereco }}">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Bairro</label>
+            <input type="text" name="bairro" class="form-control" value="{{ candidato.bairro }}">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Cidade</label>
+            <input type="text" name="cidade" class="form-control" value="{{ candidato.cidade }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Escola</label>
+            <input type="text" name="escola_2024" class="form-control" value="{{ candidato.escola_2024 }}">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Local da Prova</label>
+            <input type="text" name="local_prova" class="form-control" value="{{ candidato.local_prova }}">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-check mt-2">
+              <input type="checkbox" name="possui_necessidade_especial" class="form-check-input" id="checkNecessidade" {% if candidato.possui_necessidade_especial %}checked{% endif %}>
+              <label class="form-check-label" for="checkNecessidade">Possui Necessidade Especial?</label>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Detalhe da Necessidade</label>
+            <input type="text" name="necessidade_especial_detalhe" class="form-control" value="{{ candidato.necessidade_especial_detalhe }}">
+          </div>
+        </div>
+
+        <div class="text-end">
+          <a href="{% url 'painel_candidato' %}" class="btn btn-secondary">Cancelar</a>
+          <button type="submit" class="btn btn-success">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

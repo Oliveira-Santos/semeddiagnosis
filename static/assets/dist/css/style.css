@@ -1,0 +1,317 @@
+/* Estilos para fixar o rodapé no final */
+html,
+body {
+    height: 100%;
+    /* Ensure the body occupies full height */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/static/img/imagemcanaa.jpg");
+    background-size: cover;
+    background-position: center;
+    padding: 150px 0;
+    color: white;
+    text-align: center;
+}
+
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+}
+
+.btn-primary {
+    background-color: #f47835;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.25rem;
+    border-radius: 30px;
+}
+
+.btn-secondary {
+    background-color: #f51b1b;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.25rem;
+    border-radius: 30px;
+}
+
+.btn-primary:hover {
+    background-color: #d8682b;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #343a40;
+}
+
+.navbar-brand img {
+    height: 50px;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #f47835 !important;
+}
+
+.main-content {
+    flex: 1;
+    /* Faz o conteúdo crescer para preencher o espaço disponível */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+/* CSS for centralizing table content */
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    /* Horizontally centers text */
+    vertical-align: middle;
+    /* Vertically centers text */
+}
+
+.table th {
+    background-color: #f47835;
+    color: white;
+}
+
+.table td {
+    background-color: #f7f7f7;
+}
+
+/* Estilos para a tabela de resultados do IDEB */
+.table-container {
+    margin: 20px 0;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table th {
+    background-color: #f47835;
+    color: white;
+}
+
+.table td {
+    background-color: #f7f7f7;
+}
+
+.timer-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.timer-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f47835 0%, #ff6f61 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.timer-circle span {
+    font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+}
+
+.timer-container p {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.modal-title {
+    margin: 0;
+    flex-grow: 1;
+}
+
+.modal-location {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+#bairro-results {
+    border: 1px solid #ddd;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for depth */
+}
+
+#bairro-results div {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    /* Smooth hover effect */
+}
+
+#bairro-results div:hover {
+    background-color: #f47835;
+    /* Change background on hover */
+    color: white;
+    /* Invert text color on hover */
+    border-radius: 4px;
+    /* Rounded corners on hover */
+}
+
+input#bairro {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Slight inner shadow */
+    transition: border-color 0.2s ease-in-out;
+    /* Smooth transition for border */
+}
+
+input#bairro:focus {
+    border-color: #f47835;
+    /* Change border color on focus */
+    outline: none;
+    /* Remove default outline */
+}
+
+/* Hide all selected choices except the first one */
+.select2-selection__choice {
+    display: none;
+    /* Hide all selected choices */
+}
+
+.select2-selection__choice:first-of-type {
+    display: inline-block;
+    /* Only display the first selected item */
+}
+
+/* Ensure proper height and overflow for the select element */
+#disciplinas {
+    height: auto;
+    /* Auto-adjust height */
+    overflow-y: auto;
+    /* Enable scrolling when options exceed space */
+    min-height: 38px;
+    /* Set minimum height for single-line display */
+}
+
+/* Style for select elements with multiple selections */
+#disciplinas[multiple] {
+    height: auto;
+    /* Allow height to adjust automatically */
+}
+
+/* Add some padding for a better user experience */
+.select2-container--default .select2-selection--multiple {
+    padding: 5px;
+    height: auto;
+    min-height: 38px;
+    /* Ensure it's aligned with the single-line select */
+    display: flex;
+    align-items: center;
+}
+
+
+/* Ensure that the select dropdown looks like a single-line dropdown */
+select[multiple] {
+    height: auto;
+    /* Adjust height automatically */
+    min-height: 38px;
+    /* Set minimum height to match standard form elements */
+    overflow: hidden;
+    /* Hide extra options initially */
+    line-height: 1.5;
+    /* Adjust line height */
+}
+
+/* Ensure that the dropdown expands to show options when clicked */
+select[multiple]:focus {
+    height: auto;
+    /* Expand on focus */
+    overflow: auto;
+    /* Show options when the select is focused */
+}
+
+
+.loading-spinner {
+    position: relative;
+}
+
+.loading-spinner::after {
+    content: "";
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

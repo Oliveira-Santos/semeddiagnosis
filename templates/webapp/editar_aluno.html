@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid mt-4">
+  <form method="post" action="{% url 'editar_aluno' aluno.pk %}">
+    {% csrf_token %}
+    <div class="card shadow-sm">
+      <div class="card-header bg-warning text-white">
+        <h4 class="mb-0"><i class="fas fa-edit me-2"></i> Editar Aluno</h4>
+      </div>
+      <div class="card-body">
+        <!-- Dados Pessoais -->
+        <h5 class="text-warning"><i class="fas fa-id-card me-1"></i> Dados Pessoais</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Nome</label>
+            <input type="text" name="nome" value="{{ aluno.nome }}" class="form-control" required>
+          </div>
+          <div class="col">
+            <label>CPF</label>
+            <input type="text" name="cpf" value="{{ aluno.cpf }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Data de Nascimento</label>
+            <input type="date" name="data_nascimento" value="{{ aluno.data_nascimento|date:'Y-m-d' }}" class="form-control">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Contato -->
+        <h5 class="text-warning"><i class="fas fa-phone me-1"></i> Contato</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ aluno.email }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Telefone</label>
+            <input type="text" name="telefone" value="{{ aluno.telefone }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Telefone 2</label>
+            <input type="text" name="telefone_2" value="{{ aluno.telefone_2 }}" class="form-control">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Endereço -->
+        <h5 class="text-warning"><i class="fas fa-map-marker-alt me-1"></i> Endereço</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Endereço</label>
+            <input type="text" name="endereco" value="{{ aluno.endereco }}" class="form-control">
+          </div>
+
+          <div class="col">
+            <label>Bairro</label>
+            <select name="bairro" class="form-control">
+                <option value="">-- Selecione --</option>
+                {% for b in bairros %}
+                <option value="{{ b.id }}" {% if aluno.bairro and b.id == aluno.bairro.id %}selected{% endif %}>
+                    {{ b.bairro_distrito }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+          <div class="col">
+            <label>Cidade</label>
+            <input type="text" name="cidade" value="{{ aluno.cidade }}" class="form-control">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Dados Educacionais -->
+        <h5 class="text-warning"><i class="fas fa-school me-1"></i> Educação</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Escola</label>
+            <input type="text" name="escola_2024" value="{{ aluno.escola_2024 }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Ano do Exame</label>
+            <input type="number" name="ano_exame" value="{{ aluno.ano_exame }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Local da Prova</label>
+            <input type="text" name="local_prova" value="{{ aluno.local_prova }}" class="form-control">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Notas -->
+        <h5 class="text-warning"><i class="fas fa-chart-bar me-1"></i> Notas</h5>
+        <div class="row gy-3">
+        <div class="col-md-2">
+            <label>Português</label>
+            <input type="number" step="0.1" name="portugues" value="{{ aluno.portugues }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Redação</label>
+            <input type="number" step="0.1" name="redacao" value="{{ aluno.redacao }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Inglês</label>
+            <input type="number" step="0.1" name="ingles" value="{{ aluno.ingles }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Arte</label>
+            <input type="number" step="0.1" name="arte" value="{{ aluno.arte }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Ed. Física</label>
+            <input type="number" step="0.1" name="ed_fisica" value="{{ aluno.ed_fisica }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>História</label>
+            <input type="number" step="0.1" name="historia" value="{{ aluno.historia }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Geografia</label>
+            <input type="number" step="0.1" name="geografia" value="{{ aluno.geografia }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Matemática</label>
+            <input type="number" step="0.1" name="matematica" value="{{ aluno.matematica }}" class="form-control">
+        </div>
+        <div class="col-md-2">
+            <label>Ciências</label>
+            <input type="number" step="0.1" name="ciencias" value="{{ aluno.ciencias }}" class="form-control">
+        </div>
+        </div>
+
+        <hr>
+
+        <!-- Extras -->
+        <h5 class="text-warning"><i class="fas fa-info-circle me-1"></i> Outros</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Status</label>
+            <input type="text" name="status" value="{{ aluno.status }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Matérias Aprovadas</label>
+            <input type="text" name="materias_aprovadas" value="{{ aluno.materias_aprovadas }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Observação</label>
+            <textarea name="observacao" class="form-control">{{ aluno.observacao }}</textarea>
+          </div>
+        </div>
+
+        <div class="row gy-3 mt-2">
+          <div class="col">
+            <label>Fez Exame Supletivo?</label>
+            <input type="text" name="fez_exame_supletivo" value="{{ aluno.fez_exame_supletivo }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Prova Todas Disciplinas?</label>
+            <input type="text" name="prova_todas_disciplinas" value="{{ aluno.prova_todas_disciplinas }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Data de Inscrição</label>
+            <input type="text" readonly value="{{ aluno.data_inscricao|date:'d/m/Y H:i' }}" class="form-control-plaintext">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Necessidades -->
+        <h5 class="text-warning"><i class="fas fa-wheelchair me-1"></i> Necessidades</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Possui Necessidade?</label>
+            <input type="text" name="possui_necessidade_especial" value="{{ aluno.possui_necessidade_especial }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Detalhe</label>
+            <input type="text" name="necessidade_especial_detalhe" value="{{ aluno.necessidade_especial_detalhe }}" class="form-control">
+          </div>
+        </div>
+        <hr>
+
+        <!-- Responsável -->
+        <h5 class="text-warning"><i class="fas fa-user-shield me-1"></i> Responsável</h5>
+        <div class="row gy-3">
+          <div class="col">
+            <label>Nome</label>
+            <input type="text" name="nome_responsavel" value="{{ aluno.nome_responsavel }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>CPF</label>
+            <input type="text" name="cpf_responsavel" value="{{ aluno.cpf_responsavel }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>RG</label>
+            <input type="text" name="rg_responsavel" value="{{ aluno.rg_responsavel }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Tipo</label>
+            <input type="text" name="tipo_responsavel" value="{{ aluno.tipo_responsavel }}" class="form-control">
+          </div>
+          <div class="col">
+            <label>Maior de 18?</label>
+            <input type="checkbox" name="maior_de_18" {% if aluno.maior_de_18 %}checked{% endif %}>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer d-flex justify-content-between">
+        <a href="{% url 'visualizar_aluno' aluno.id %}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left"></i> Cancelar
+        </a>
+        <button type="submit" class="btn btn-success" id="botao-salvar" style="display: none;"></button>
+        <button type="button" class="btn btn-success" onclick="confirmarEdicao()">
+        <i class="fas fa-save"></i> Salvar Alterações
+        </button>
+
+
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- HEAD -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+function confirmarEdicao() {
+  Swal.fire({
+    title: 'Confirmar Edição?',
+    text: 'Tem certeza que deseja salvar as alterações deste aluno?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sim, salvar',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#d33',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById('botao-salvar').click();  // mais seguro
+    }
+  });
+}
+
+</script>
+
+
+{% endblock %}

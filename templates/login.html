@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal de Acesso</title>
+
+    <!-- Fonts e Estilo -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}" />
+    <style>
+      body {
+        background: url("{% static 'assets/dist/img/canaaeja2.png' %}") no-repeat center center fixed;
+        background-size: cover;
+        font-family: 'Inter', sans-serif;
+      }
+      .login-container {
+        max-width: 400px;
+        margin: 80px auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      }
+      .logo {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .logo img {
+        max-width: 180px;
+      }
+      .btn-access {
+        background-color: #f3d572;
+        color: #333;
+        font-weight: 600;
+        border: none;
+      }
+      .btn-access:hover {
+        background-color: #e6c85c;
+      }
+      .form-control {
+        border-radius: 8px;
+      }
+      .form-group {
+        margin-bottom: 1.2rem;
+      }
+      .text-small {
+        font-size: 0.9rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="login-container">
+      <div class="logo">
+        <img src="{% static 'assets/dist/img/logoSite1.png' %}" alt="Logo" />
+      </div>
+
+      <h5 class="text-center mb-2">Seja Bem-Vindo ao Diagnosis!</h5>
+      <p class="text-center text-warning">Acesse sua conta</p>
+
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <input type="email" name="email" class="form-control" placeholder="E-mail" required />
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="cpf" class="form-control" placeholder="CPF" required />
+        </div>
+
+        <div class="form-group">
+          <select class="form-control" name="user_type" id="user_type" required>
+            <option value="">Selecione o tipo de usuário</option>
+            <option value="admin">Administrador</option>
+            <option value="gabinete">Gabinete</option>
+            <option value="dide">Dide</option>
+            <option value="diagnose">Diágnosis</option>
+            <option value="gestor">Gestor</option>
+            <option value="rede">Rede</option>
+          </select>
+        </div>
+
+        <div class="form-group d-none" id="submenu">
+          <select class="form-control" name="user_role" id="user_role">
+            <option value="">Selecione o cargo</option>
+            <option value="adm">Administrador</option>
+            <option value="tecnico">Técnico</option>
+            <option value="candidato">Candidato</option>
+          </select>
+        </div>
+
+        <div class="form-group d-none" id="escolas_submenu">
+          <select class="form-control" name="escola" id="escola">
+            <option value="">Selecione a Escola</option>
+            <option value="escola_1">Escola 1</option>
+            <option value="escola_2">Escola 2</option>
+            <option value="escola_3">Escola 3</option>
+            <option value="escola_4">Escola 4</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <input type="password" name="password" class="form-control" placeholder="Senha" required />
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-access btn-block">Acessar</button>
+        </div>
+
+        <div class="form-group text-small">
+          <a href="#" data-toggle="modal" data-target="#modalRecuperarSenhaAdmin">Esqueci minha senha</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal de Recuperação -->
+    <div class="modal fade" id="modalRecuperarSenhaAdmin" tabindex="-1" role="dialog" aria-labelledby="modalRecuperarSenhaAdminLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="formRecuperarSenhaAdmin" method="post">
+            {% csrf_token %}
+            <div class="modal-header bg-primary text-white">
+              <h5 class="modal-title" id="modalRecuperarSenhaAdminLabel">Recuperar Senha</h5>
+              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Informe o e-mail institucional cadastrado para enviar o link de redefinição.</p>
+              <div class="form-group">
+                <label for="emailRecuperacaoAdmin">E-mail</label>
+                <input type="email" class="form-control" id="emailRecuperacaoAdmin" name="email" required />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" id="btnEnviarReset" class="btn btn-primary">Enviar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Submenus dinâmicos -->
+    <script>
+      document.getElementById('user_type').addEventListener('change', function () {
+        let userType = this.value;
+        let submenu = document.getElementById('submenu');
+        let escolasSubmenu = document.getElementById('escolas_submenu');
+
+        submenu.classList.add('d-none');
+        escolasSubmenu.classList.add('d-none');
+
+        if (["gabinete", "dide", "diagnose", "gestor"].includes(userType)) {
+          submenu.classList.remove('d-none');
+        } else if (userType === "rede") {
+          escolasSubmenu.classList.remove('d-none');
+        }
+      });
+    </script>
+
+    <!-- AJAX recuperação -->
+    <script>
+      $(document).ready(function () {
+        $('#formRecuperarSenhaAdmin').on('submit', function (e) {
+          e.preventDefault();
+
+          const email = $('#emailRecuperacaoAdmin').val();
+          const csrfToken = $("input[name=csrfmiddlewaretoken]").val();
+
+          $('#btnEnviarReset').html(`<span class="spinner-border spinner-border-sm me-1"></span> Enviando...`).prop('disabled', true);
+
+          $.ajax({
+            url: "{% url 'ajax_admin_password_reset' %}",
+            type: "POST",
+            data: {
+              email: email,
+              csrfmiddlewaretoken: csrfToken,
+            },
+            success: function () {
+              $('#modalRecuperarSenhaAdmin').modal('hide');
+              Swal.fire('E-mail enviado!', 'Verifique sua caixa de entrada ou spam.', 'success');
+            },
+            error: function () {
+              Swal.fire('Erro', 'Não foi possível enviar o e-mail.', 'error');
+            },
+            complete: function () {
+              $('#btnEnviarReset').html('Enviar').prop('disabled', false);
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

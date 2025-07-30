@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Arquivos</title>
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Inclui o navbar -->
+        {% include 'navbar.html' %}
+        <!-- Inclui o sidebar -->
+        {% include 'sidebar.html' %}
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Header da página -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Gestão de Arquivos</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conteúdo da página -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Cards no topo -->
+                    <div class="row">
+                        <div class="col-lg-3 col-6">
+                            <!-- Card 1 -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>{{ total_registros }}</h3>
+                                    <p>Total de Registros</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-database"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- Card 2 -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>{{ concluintes }}</h3>
+                                    <p>Concluintes</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-graduate"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- Card 3 -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ nao_concluintes }}</h3>
+                                    <p>Não Concluintes</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-user-times"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Dados -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Lista de Registros</h3>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nome</th>
+                                        <th>CPF</th>
+                                        <th>Status</th>
+                                        <th>Observação</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for registro in registros %}
+                                    <tr>
+                                        <td>{{ registro.id }}</td>
+                                        <td>{{ registro.nome }}</td>
+                                        <td>{{ registro.cpf }}</td>
+                                        <td>
+                                            {% if registro.status == 'aprovado' %}
+                                                <span class="badge bg-success">Aprovado</span>
+                                            {% else %}
+                                                <span class="badge bg-danger">Reprovado</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ registro.observacao }}</td>
+
+
+
+                                        <td>
+                                            <a href="{% url 'editar_registro' registro.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <a href="{% url 'excluir_registro' registro.id %}" class="btn btn-sm btn-danger" 
+                                               onclick="return confirm('Tem certeza que deseja excluir este registro?')">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </a>
+                                            {% if registro.status == "aprovado" %}
+                                                <a href="{% url 'emitir_certificado' registro.id %}" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-file-alt"></i> Emitir Certificado
+                                                </a>
+                                                <a href="{% url 'emitir_atestado' registro.id %}" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-file-alt"></i> Emitir Atestado
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        
+
+
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6" class="text-center">Nenhum registro encontrado.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                
+
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        {% include 'footer.html' %}
+    </div>
+    <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'assets/dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>

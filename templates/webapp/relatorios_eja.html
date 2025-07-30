@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container-fluid py-4 px-5">
+    <div class="card shadow rounded-4 mb-4 border-0">
+        <div class="card-body">
+            <h2 class="text-center fw-bold text-primary mb-2">{{ titulo }}</h2>
+            <p class="text-center text-muted">{{ descricao }}</p>
+        </div>
+    </div>
+
+    <!-- Filtro por ano -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="get" class="row align-items-end g-3">
+                <div class="col-md-4">
+                    <label for="ano_exame" class="form-label fw-semibold text-secondary">Ano do Exame</label>
+                    <select name="ano_exame" id="ano_exame" class="form-select rounded-3 shadow-sm" style="background-color:#f0f8ff; border:2px solid #007bff; font-weight:500;">
+                        <option value="">Todos os anos</option>
+                        {% for ano in anos_disponiveis %}
+                            <option value="{{ ano }}" {% if ano|stringformat:"s" == ano_exame %}selected{% endif %}>
+    {{ ano }}
+</option>
+
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-outline-primary w-100 shadow-sm">
+                        <i class="fas fa-filter me-1"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contagem -->
+    <p class="text-muted">Registros carregados: <strong>{{ registros|length }}</strong></p>
+
+    <!-- Tabela -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Status</th>
+                    <th>Português</th>
+                    <th>Matemática</th>
+                    <th>História</th>
+                    <th>Geografia</th>
+                    <th>Média Linguagens</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if registros %}
+                    {% for aluno in registros %}
+                    <tr>
+                        <td>{{ aluno.nome }}</td>
+                        <td>{{ aluno.cpf }}</td>
+                        <td>{{ aluno.status }}</td>
+                        <td>{{ aluno.portugues }}</td>
+                        <td>{{ aluno.matematica }}</td>
+                        <td>{{ aluno.historia }}</td>
+                        <td>{{ aluno.geografia }}</td>
+                        <td>{{ aluno.media_ling }}</td>
+                        <td>
+                            {% if aluno.status == 'concluinte' %}
+                                <span class="badge bg-success">Aprovado</span>
+                            {% elif aluno.status == 'parcial' %}
+                                <span class="badge bg-warning text-dark">Parcial</span>
+                            {% else %}
+                                <span class="badge bg-danger">Reprovado</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-muted">Nenhum registro encontrado.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript: Submeter automaticamente ao trocar ano -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const anoSelect = document.getElementById('ano_exame');
+    if (anoSelect) {
+        anoSelect.addEventListener('change', function () {
+            this.form.submit();
+        });
+    }
+});
+</script>
+
+{% endblock %}

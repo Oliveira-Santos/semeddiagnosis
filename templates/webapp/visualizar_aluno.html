@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+
+
+<div class="container-fluid mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0"><i class="fas fa-user-graduate me-2"></i> Dados do Aluno</h4>
+    </div>
+    <div class="card-body">
+
+      <!-- Dados Pessoais -->
+      <h5 class="text-primary"><i class="fas fa-id-card me-1"></i> Dados Pessoais</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Nome:</strong> {{ aluno.nome }}</div>
+        <div class="col"><strong>CPF:</strong> {{ aluno.cpf }}</div>
+        <div class="col"><strong>Data de Nascimento:</strong> {{ aluno.data_nascimento|date:"d/m/Y" }}</div>
+      </div>
+      <hr>
+
+      <!-- Contato -->
+      <h5 class="text-primary"><i class="fas fa-phone me-1"></i> Contato</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Email:</strong> {{ aluno.email }}</div>
+        <div class="col"><strong>Telefone:</strong> {{ aluno.telefone }}</div>
+        <div class="col"><strong>Telefone 2:</strong> {{ aluno.telefone_2 }}</div>
+      </div>
+      <hr>
+
+      <!-- Endereço -->
+      <h5 class="text-primary"><i class="fas fa-map-marker-alt me-1"></i> Endereço</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Endereço:</strong> {{ aluno.endereco }}</div>
+        <div class="col"><strong>Bairro:</strong> {{ aluno.bairro }}</div>
+        <div class="col"><strong>Cidade:</strong> {{ aluno.cidade }}</div>
+      </div>
+      <hr>
+
+      <!-- Informações Educacionais -->
+      <h5 class="text-primary"><i class="fas fa-school me-1"></i> Dados Educacionais</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Escola:</strong> {{ aluno.escola_2024 }}</div>
+        <div class="col"><strong>Ano do Exame:</strong> {{ aluno.ano_exame }}</div>
+        <div class="col"><strong>Local da Prova:</strong> {{ aluno.local_prova }}</div>
+      </div>
+      <hr>
+
+      <!-- Notas -->
+      <h5 class="text-primary"><i class="fas fa-chart-bar me-1"></i> Notas por Disciplina</h5>
+      <div class="row gy-2">
+        <div class="col"><strong>Português:</strong> {{ aluno.portugues }}</div>
+        <div class="col"><strong>Redação:</strong> {{ aluno.redacao }}</div>
+        <div class="col"><strong>Inglês:</strong> {{ aluno.ingles }}</div>
+        <div class="col"><strong>Arte:</strong> {{ aluno.arte }}</div>
+        <div class="col"><strong>Ed. Física:</strong> {{ aluno.ed_fisica }}</div>
+        <div class="col"><strong>História:</strong> {{ aluno.historia }}</div>
+        <div class="col"><strong>Geografia:</strong> {{ aluno.geografia }}</div>
+        <div class="col"><strong>Matemática:</strong> {{ aluno.matematica }}</div>
+        <div class="col"><strong>Ciências:</strong> {{ aluno.ciencias }}</div>
+      </div>
+      <hr>
+
+      <!-- Outros Dados -->
+      <h5 class="text-primary"><i class="fas fa-info-circle me-1"></i> Outros Dados</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Status:</strong> {{ aluno.status }}</div>
+        <div class="col"><strong>Matérias Aprovadas:</strong> {{ aluno.materias_aprovadas }}</div>
+        <div class="col"><strong>Observação:</strong> {{ aluno.observacao }}</div>
+        <div class="col"><strong>Fez Exame Supletivo?</strong> {{ aluno.fez_exame_supletivo }}</div>
+        <div class="col"><strong>Prova Todas Disciplinas?</strong> {{ aluno.prova_todas_disciplinas }}</div>
+        <div class="col"><strong>Data de Inscrição:</strong> {{ aluno.data_inscricao|date:"d/m/Y H:i" }}</div>
+      </div>
+      <hr>
+
+      <!-- Necessidades -->
+      <h5 class="text-primary"><i class="fas fa-wheelchair me-1"></i> Necessidades Especiais</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Possui Necessidade?</strong> {{ aluno.possui_necessidade_especial }}</div>
+        <div class="col"><strong>Detalhe:</strong> {{ aluno.necessidade_especial_detalhe }}</div>
+      </div>
+      <hr>
+
+      <!-- Responsável -->
+      <h5 class="text-primary"><i class="fas fa-user-shield me-1"></i> Responsável Legal</h5>
+      <div class="row gy-3">
+        <div class="col"><strong>Nome:</strong> {{ aluno.nome_responsavel }}</div>
+        <div class="col"><strong>CPF:</strong> {{ aluno.cpf_responsavel }}</div>
+        <div class="col"><strong>RG:</strong> {{ aluno.rg_responsavel }}</div>
+        <div class="col"><strong>Tipo:</strong> {{ aluno.tipo_responsavel }}</div>
+        <div class="col"><strong>Maior de 18?</strong> {{ aluno.maior_de_18|yesno:"Sim,Não" }}</div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between">
+      <a href="{% url 'lista_alunos_eja' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Voltar
+      </a>
+      <a href="{% url 'editar_aluno' aluno.id %}" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Editar
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% load custom_filters %}
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h3><i class="fas fa-user text-primary"></i> Detalhes do Aluno</h3>
+  <table class="table table-bordered mt-3">
+    <tr><th>Nome</th><td>{{ aluno.nome }}</td></tr>
+    <tr><th>CPF</th><td>{{ aluno.cpf }}</td></tr>
+    <tr><th>Data de Nascimento</th><td>{{ aluno.data_nascimento|date:"d/m/Y" }}</td></tr>
+    <tr><th>Escola</th><td>{{ aluno.escola_2024 }}</td></tr>
+    <tr><th>Ano do Exame</th><td>{{ aluno.ano_exame }}</td></tr>
+    <tr><th>Email</th><td>{{ aluno.email }}</td></tr>
+    <!-- Adicione mais campos conforme necessário -->
+  </table>
+  <a href="{% url 'editar_aluno' aluno.id %}" class="btn btn-warning">
+    <i class="fas fa-edit"></i> Editar
+  </a>
+  <a href="{% url 'lista_alunos_eja' %}" class="btn btn-secondary ml-2">
+    <i class="fas fa-arrow-left"></i> Voltar
+  </a>
+</div>
+{% endblock %}
