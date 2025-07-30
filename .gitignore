@@ -1,0 +1,54 @@
+# ============================
+# Python/Django padrão
+# ============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.sqlite3
+*.log
+*.pot
+*.mo
+*.pyc
+
+# ============================
+# Virtualenv
+# ============================
+env/
+venv/
+ENV/
+VENV/
+.venv/
+.ENV/
+
+# ============================
+# Arquivos sensíveis
+# ============================
+.env
+*.secret
+secrets.json
+
+# ============================
+# Django files
+# ============================
+db.sqlite3
+media/
+staticfiles/
+uploads/
+
+# ============================
+# IDEs e editores
+# ============================
+.vscode/
+.idea/
+*.swp
+*~
+*.bak
+
+# ============================
+# Sistema operacional
+# ============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
