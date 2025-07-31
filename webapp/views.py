@@ -3054,8 +3054,8 @@ def login_candidato(request):
         senha = request.POST.get('senha', '').strip()
 
         # Validação básica do CPF
-        if not re.match(r'^\d{11}$', cpf):
-            messages.error(request, 'CPF inválido. Digite os 11 dígitos numéricos.')
+        if not re.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$', cpf):
+            messages.error(request, 'CPF inválido. Use o formato 000.000.000-00.')
             return render(request, 'login_candidato.html')
 
         if not senha:
@@ -3306,9 +3306,19 @@ def verifica_email_reset(request):
 
 ################################################################################################################################################
 
+from django.db.models import Min
+from django.http import JsonResponse
+from .models import Bairro
+
 def get_bairros(request):
-    bairros = Bairro.objects.all().values('id', 'bairro_distrito')
+    bairros = (
+        Bairro.objects
+        .values('bairro_distrito')
+        .annotate(id=Min('id'))  # pega o menor id por bairro
+        .order_by('bairro_distrito')  # ordena alfabeticamente
+    )
     return JsonResponse({'bairros': list(bairros)})
+
 ################################################################################################################################################
 
 def redefinir_senha_view(request, token):
@@ -3465,8 +3475,8 @@ def login_candidato_admin(request):
         senha = request.POST.get('password', '').strip()
 
         # Validação básica
-        if not re.match(r'^\d{11}$', cpf):
-            messages.error(request, 'CPF inválido.')
+        if not re.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$', cpf):
+            messages.error(request, 'CPF inválido. Use o formato 000.000.000-00.')
             return render(request, 'login_candidato.html')
 
         if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', email):
@@ -3504,14 +3514,29 @@ def login_candidato_admin(request):
 
 ################################################################################################################################################
 
+import re
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+from .models import CustomUser
+
 def login_admin(request):
     if request.method == 'POST':
-        cpf = request.POST.get('cpf')
-        senha = request.POST.get('password')
-        user_type = request.POST.get('user_type')
+        cpf = request.POST.get('cpf', '').strip()
+        senha = request.POST.get('password', '').strip()
+        user_type = request.POST.get('user_type', '').strip()
 
         print("🔍 CPF:", cpf)
         print("🔍 Tipo:", user_type)
+
+        # Validação do CPF com máscara
+        if not re.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$', cpf):
+            messages.error(request, 'CPF inválido. Use o formato 000.000.000-00.')
+            return render(request, 'login_admin.html')
+
+        if not senha:
+            messages.error(request, 'Senha não informada.')
+            return render(request, 'login_admin.html')
 
         try:
             user = CustomUser.objects.get(cpf=cpf, tipo=user_type, is_active=True)
@@ -3531,6 +3556,7 @@ def login_admin(request):
             messages.error(request, 'Usuário não encontrado ou tipo incorreto.')
 
     return render(request, 'login_admin.html')
+
 
 ################################################################################################################################################
 
