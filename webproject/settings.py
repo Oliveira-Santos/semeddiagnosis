@@ -7,11 +7,10 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
-    '127.0.0.1',
-    '10.19.35.56',
-    'localhost',
-    'eja.semedcanaadoscarajas.pa.gov.br',
-    '18.230.92.238',
+    "educa.semedcanaadoscarajas.pa.gov.br",
+    "127.0.0.1",
+    "localhost",
+    "18.231.6.41",
 ]
 
 
