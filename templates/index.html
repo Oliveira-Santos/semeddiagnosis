@@ -268,12 +268,20 @@
             /* Garante que o conteúdo fique acima da camada de transparência */
         }
 
-
-
-
-
-
 </style>
+
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+
+
 <body>
    <!-- Navbar -->
 <!-- Navbar -->
@@ -377,15 +385,15 @@
   <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" style="height: 100%;">
     <div class="carousel-inner" style="height: 100%;">
       <div class="carousel-item active" style="height: 100%;">
-        <img src="{% static 'assets/dist/img/banner7.jpeg' %}" alt="Banner 1"
+        <img src="{% static 'assets/dist/img/cemejaescola1.png' %}" alt="Banner 1"
              style="width: 100%; height: 100%; object-fit: cover;">
       </div>
       <div class="carousel-item" style="height: 100%;">
-        <img src="{% static 'assets/dist/img/banner5.jpg' %}" alt="Banner 2"
+        <img src="{% static 'assets/dist/img/cemejaEscola2.png' %}" alt="Banner 2"
              style="width: 100%; height: 100%; object-fit: cover;">
       </div>
       <div class="carousel-item" style="height: 100%;">
-        <img src="{% static 'assets/dist/img/banner4.jpeg' %}" alt="Banner 3"
+        <img src="{% static 'assets/dist/img/cemejaEscola3.png' %}" alt="Banner 3"
              style="width: 100%; height: 100%; object-fit: cover;">
       </div>
     </div>
@@ -493,13 +501,13 @@
                     <div class="row">
                         <!-- Nome Completo -->
                         <div class="col-md-4 mb-3">
-                            <label for="nome_completo" class="form-label">Nome Completo</label>
+                            <label for="nome_completo" class="form-label">Nome Completo </label><span style="color: red;"><b>*</b></span>
                             <input type="text" class="form-control" id="nome_completo" name="nome_completo" required>
                         </div>
 
                         <!-- Email -->
                         <div class="col-md-4 mb-3">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label">Email </label><span style="color: red;"><b>*</b></span>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
 
@@ -507,7 +515,7 @@
                         <!-- CPF do Candidato Formulário -->
                         <!-- CPF do Candidato Formulário -->
                         <div class="col-md-4 mb-3">
-                            <label for="cpf_form" class="form-label">Número do CPF do Candidato</label>
+                            <label for="cpf_form" class="form-label">Número do CPF do Candidato </label><span style="color: red;"><b>*</b></span>
                             <input type="text" class="form-control" id="cpf_candidato" name="cpf_form" placeholder="Digite seu CPF" required>
                         </div>
 
@@ -521,13 +529,13 @@
 
                         <!-- Data de Nascimento -->
                         <div class="col-md-4 mb-3">
-                            <label for="dataNascimento" class="form-label">Data de Nascimento</label>
+                            <label for="dataNascimento" class="form-label">Data de Nascimento </label><span style="color: red;"><b>*</b></span>
                             <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" required onchange="verificarIdade()">
                         </div>
 
                           <!-- Radio buttons para maior de idade, inicialmente desabilitados -->
                         <div class="col-md-4 mb-3">
-                            <label for="maior_de_18" class="form-label">O Candidato é maior de 18 anos?</label><br>
+                            <label for="maior_de_18" class="form-label">O Candidato é maior de 18 anos?</label><span style="color: red;"><b>*</b></span><br>
                             <div class="form-check form-check-inline">
                                 <input type="radio" id="maior_de_18_sim" name="maior_de_18" value="Sim" class="form-check-input" onchange="verificarMaiorIdade()" disabled checked>
                                 <label for="maior_de_18_sim" class="form-check-label">Sim</label>
@@ -584,7 +592,7 @@
 
                         <!-- Telefone -->
                         <div class="col-md-4 mb-3">
-                            <label for="telefone" class="form-label">Nº de Telefone do Candidato</label>
+                            <label for="telefone" class="form-label">Nº de Telefone do Candidato</label><span style="color: red;"><b>*</b></span>
                             <input type="tel" class="form-control" id="telefone" name="telefone" required>
                         </div>
 
@@ -596,7 +604,7 @@
 
                         <!-- Cidade -->
                         <div class="col-md-4 mb-3">
-                            <label for="cidade" class="form-label">Cidade</label>
+                            <label for="cidade" class="form-label">Cidade</label><span style="color: red;"><b>*</b></span>
                             <input type="text" class="form-control" id="cidade" name="cidade" required>
                         </div>
 
@@ -608,13 +616,13 @@
 
                          <!-- Endereço -->
                          <div class="col-md-6 mb-3">
-                            <label for="endereco" class="form-label">Endereço</label>
+                            <label for="endereco" class="form-label">Endereço</label><span style="color: red;"><b>*</b></span>
                             <input type="text" class="form-control" id="endereco" name="endereco" required>
                         </div>
 
                         <!-- Bairro -->
                         <div class="col-md-6 mb-3">
-                            <label for="bairro" class="form-label">Bairros</label>
+                            <label for="bairro" class="form-label">Bairro</label><span style="color: red;"><b>*</b></span>
                             <select class="form-control" id="bairro" name="bairro" required>
                                 <option value="">Selecione o Bairro</option>
                                 <!-- Add options dynamically -->
@@ -622,26 +630,27 @@
                         </div>
 
 
-                        <div class="row">
-    <!-- Fez exame supletivo -->
-    <div class="col-md-4 mb-3">
-        <label for="fez_exame_supletivo" class="form-label">Já fez a prova do exame supletivo?</label><br>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="fez_exame_sim" name="fez_exame_supletivo" value="Sim" class="form-check-input" required>
-            <label for="fez_exame_sim" class="form-check-label">Sim</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" id="fez_exame_nao" name="fez_exame_supletivo" value="Não" class="form-check-input" required checked>
-            <label for="fez_exame_nao" class="form-check-label">Não</label>
-        </div>
+                        <div class="row align-items-center mb-3">
+  <!-- Coluna da pergunta -->
+  <div class="col-md-6">
+    <label class="form-label">Já fez a prova do exame supletivo?</label><span style="color: red;"><b>*</b></span><br>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="fez_exame_supletivo" id="fez_exame_sim" value="Sim">
+      <label class="form-check-label" for="fez_exame_sim">Sim</label>
     </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="fez_exame_supletivo" id="fez_exame_nao" value="Não" checked>
+      <label class="form-check-label" for="fez_exame_nao">Não</label>
+    </div>
+  </div>
 
-    <!-- Ano da última prova -->
-    <div class="col-md-4 mb-3" id="ano_ultima_prova_div" style="display: none;">
-        <label for="ano_ultima_prova" class="form-label">Ano da última prova</label>
-        <input type="number" class="form-control" id="ano_ultima_prova" name="ano_ultima_prova" min="2000" max="2025">
-    </div>
+  <!-- Coluna do campo de ano -->
+  <div class="col-md-6" id="ano_ultima_prova_div" style="display: none;">
+    <label for="ano_ultima_prova" class="form-label">Ano da última prova</label><span style="color: red;"><b>*</b></span>
+    <input type="number" class="form-control" name="ano_ultima_prova" id="ano_ultima_prova" min="2000" max="2025">
+  </div>
 </div>
+
 
 
 
@@ -669,7 +678,7 @@
 
 <!-- Lista de Disciplinas -->
 <div class="col-md-8 mb-3" id="grupo_disciplinas">
-    <label class="form-label">Qual(is) disciplina(s) deseja realizar a prova?</label>
+    <label class="form-label">Qual(is) disciplina(s) deseja realizar a prova?</label><span style="color: red;"><b>*</b></span>
     <div class="row" id="container-disciplinas">
         {% for disciplina in disciplinas %}
         <div class="col-md-6">
@@ -692,7 +701,7 @@
 
     <!-- Necessidade especial -->
     <div class="col-md-4 mb-3">
-        <label for="necessidade_especial" class="form-label">Possui necessidade especial?</label><br>
+        <label for="necessidade_especial" class="form-label">Possui necessidade especial?</label><span style="color: red;"><b>*</b></span><br>
         <div class="form-check form-check-inline">
             <input type="radio" id="necessidade_especial_sim" name="possui_necessidade_especial"
                 value="Sim" class="form-check-input" required onchange="toggleSpecialNeeds(true)">
@@ -715,7 +724,7 @@
                     
                         <div class="col-md-4 mb-3">
                             <label for="necessidade_especial_detalhe" class="form-label">Caso possua, favor
-                                assinalar</label>
+                                assinalar</label><span style="color: red;"><b>*</b></span>
                             <select class="form-select" id="necessidade_especial_detalhe"
                                 name="necessidade_especial_detalhe" disabled>
                                 <option value="">Selecione...</option>
@@ -734,7 +743,7 @@
 
                         <!-- Senha -->
                         <div class="col-md-4 mb-3">
-                            <label for="senha" class="form-label">Senha</label>
+                            <label for="senha" class="form-label">Senha</label><span style="color: red;"><b>*</b></span>
                             <div class="input-group">
                                 <input type="password" class="form-control" id="senha" name="senha" required>
                                 <div class="input-group-append">
@@ -747,7 +756,7 @@
                         
                         <!-- Confirmar Senha -->
                         <div class="col-md-4 mb-3">
-                            <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                            <label for="confirmar_senha" class="form-label">Confirmar Senha</label><span style="color: red;"><b>*</b></span>
                             <div class="input-group">
                                 <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" required>
                                 <div class="input-group-append">
@@ -763,7 +772,7 @@
                         
                             <!-- Local de Realização da Prova -->
                             <div class="col-md-4 mb-3">
-                                <label for="local_prova" class="form-label">Em qual local deseja realizar as provas?*</label>
+                                <label for="local_prova" class="form-label">Em qual local deseja realizar as provas?</label>
                                 <select class="form-control" id="local_prova" name="local_prova" required>
                                     <option value="" disabled selected>Selecione o local da prova</option>
                                     <option value="CMEJA Jose de Deus Andrade">CMEJA Jose de Deus Andrade</option>
@@ -777,16 +786,16 @@
                             </div>
                         
                             <div class="col-md-4 mb-3">
-                                <label for="data_prova" class="form-label">Data de realização da Prova*</label>
+                                <label for="data_prova" class="form-label">Data de realização da Prova</label>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="data_prova_checkbox" name="data_prova_checkbox" checked disabled>
-                                    <label class="form-check-label" for="data_prova_checkbox">01/10/2025</label>
+                                    <label class="form-check-label" for="data_prova_checkbox" checked disabled>19/10/2025</label>
                                 </div>
                             </div>
                             
                             <!-- Nome da Escola (Se Estudando) -->
                             <div class="col-md-4 mb-3">
-                                <label for="escola_2024" class="form-label">Caso esteja matriculado em 2025, qual escola*</label>
+                                <label for="escola_2024" class="form-label">Caso esteja matriculado em 2025, qual escola</label>
                                 <select class="form-control" id="escola_2024" name="escola_2024" required>
                                     <option value="" disabled selected>Selecione a escola</option>
                                     <option value="NÃO ESTOU ESTUDANDO EM 2024">NÃO ESTOU ESTUDANDO EM 2024</option>
@@ -819,7 +828,7 @@
                         <!-- Deseja participar do Aulão? -->
 <!-- Pergunta principal -->
 <div class="mb-3">
-  <label class="form-label">Deseja participar dos aulões preparatórios para o exame de suplência 2025?</label><br>
+  <label class="form-label">Deseja participar dos aulões preparatórios para o exame de suplência 2025?</label><span style="color: red;"><b>*</b></span><br>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="deseja_participar_aulao" id="aulao_sim" value="Sim">
     <label class="form-check-label" for="aulao_sim">Sim</label>
@@ -833,19 +842,21 @@
 <!-- Turnos (inicialmente oculto) -->
 <div id="aulao_campos" style="display: none;">
   <label class="form-label">Em caso afirmativo, escolha o turno desejado:</label>
+
   <div class="form-check">
-    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Matutino" id="turno_matutino">
+    <input class="form-check-input" type="radio" name="turnos_aulao" value="Matutino" id="turno_matutino" checked>
     <label class="form-check-label" for="turno_matutino">Turno Matutino</label>
   </div>
   <div class="form-check">
-    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Vespertino" id="turno_vespertino">
+    <input class="form-check-input" type="radio" name="turnos_aulao" value="Vespertino" id="turno_vespertino">
     <label class="form-check-label" for="turno_vespertino">Turno Vespertino</label>
   </div>
   <div class="form-check">
-    <input class="form-check-input" type="checkbox" name="turnos_aulao" value="Noturno" id="turno_noturno">
+    <input class="form-check-input" type="radio" name="turnos_aulao" value="Noturno" id="turno_noturno">
     <label class="form-check-label" for="turno_noturno">Turno Noturno</label>
   </div>
 </div>
+
 
 
 
@@ -865,7 +876,7 @@
                                         <b>TERMOS e CONDIÇÕES</b>
                                     </a>
                                     deste Edital, incluindo as diretrizes para o exame de Suplência 2025, a data programada para 
-                                    <strong>1º de outubro de 2025</strong>, o horário de início às <strong>7h30</strong> e o formato 
+                                    <strong>19 de outubro de 2025</strong>, o horário de início às <strong>7h30</strong> e o formato 
                                     <strong>presencial</strong> do exame.
                                 </label>
                                 
@@ -1029,7 +1040,7 @@
     </div>
 
     <div class="col-md-4">
-      <label for="neighborhood-input" class="form-label">Bairros:</label>
+      <label for="neighborhood-input" class="form-label">Bairro:</label>
       <div class="input-group">
         <span class="input-group-text"><i class="fas fa-city"></i></span>
         <input type="text" id="neighborhood-input" class="form-control" placeholder="Digite o Bairro">
@@ -1930,6 +1941,35 @@
                     toggleTurnos();
                 });
             </script>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const sim = document.getElementById('fez_exame_sim');
+    const nao = document.getElementById('fez_exame_nao');
+    const divAno = document.getElementById('ano_ultima_prova_div');
+    const campoAno = document.getElementById('ano_ultima_prova');
+
+    function toggleAno() {
+        if (sim.checked) {
+            divAno.style.display = 'block';
+            campoAno.value = campoAno.value || '2024';  // só preenche se estiver vazio
+        } else {
+            divAno.style.display = 'none';
+            campoAno.value = '';
+        }
+    }
+
+    sim.addEventListener('change', toggleAno);
+    nao.addEventListener('change', toggleAno);
+
+    toggleAno();  // executa ao carregar
+});
+</script>
+
+
+
             
             
      </body>

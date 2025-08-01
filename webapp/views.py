@@ -2801,7 +2801,6 @@ from .utils import gerar_numero_unico  # ajuste se necessário
 def cadastro_usuario_view(request):
     if request.method == 'POST':
         try:
-            # Coleta dos dados do formulário
             nome = request.POST.get('nome_completo')
             email = request.POST.get('email')
             cpf = request.POST.get('cpf_form')
@@ -2826,16 +2825,22 @@ def cadastro_usuario_view(request):
                 bairro_instance = None
 
             fez_exame_supletivo = request.POST.get('fez_exame_supletivo') == 'Sim'
-            ano_ultima_prova = request.POST.get('ano_ultima_prova')
+            ano_ultima_prova_raw = request.POST.get('ano_ultima_prova')
 
-            prova_todas_disciplinas = request.POST.get('prova_todas_disciplinas')  # "Sim" ou "Não"
+            if fez_exame_supletivo:
+                if not ano_ultima_prova_raw or not ano_ultima_prova_raw.isdigit():
+                    messages.error(request, "Você informou que já fez o exame supletivo, mas não preencheu o ano da última prova.")
+                    return redirect('cadastro_usuario')
+                else:
+                    ano_ultima_prova = int(ano_ultima_prova_raw)
+            else:
+                ano_ultima_prova = None
 
-            # Se for "Sim", marcar todas manualmente com base nas disciplinas do banco
+            prova_todas_disciplinas = request.POST.get('prova_todas_disciplinas')
             if prova_todas_disciplinas == "Sim":
                 disciplinas = ", ".join([d.nome for d in Disciplina.objects.filter(ativo=True)])
             else:
                 disciplinas = ", ".join(request.POST.getlist('disciplinas[]'))
-
 
             possui_necessidade_especial = request.POST.get('possui_necessidade_especial') == 'Sim'
             necessidade_especial_detalhe = request.POST.get('necessidade_especial_detalhe')
@@ -2847,15 +2852,23 @@ def cadastro_usuario_view(request):
             escola_2024 = request.POST.get('escola_2024')
             termos_condicoes = request.POST.get('termos_condicoes') == 'on'
 
-            # ✅ Campos dos aulões com nomes corretos do modelo
+            # ✅ Coleta e validação do campo de aulão
             deseja_participar_aulao = request.POST.get('deseja_participar_aulao', 'Não')
-            turnos_aulao = ", ".join(request.POST.getlist('turnos_aulao'))
+            turno_aulao = request.POST.get('turnos_aulao') if deseja_participar_aulao == 'Sim' else ''
+
+            VALIDOS_TURNOS = ['Matutino', 'Vespertino', 'Noturno']
+            if deseja_participar_aulao == 'Sim':
+                if not turno_aulao:
+                    messages.error(request, "Você marcou que deseja participar dos aulões, mas não selecionou o turno desejado.")
+                    return redirect('cadastro_usuario')
+                elif turno_aulao not in VALIDOS_TURNOS:
+                    messages.error(request, "Turno de aulão inválido selecionado.")
+                    return redirect('cadastro_usuario')
 
             # Campos padrão
             ano_exame = 2025
             numero = gerar_numero_unico()
 
-            # Criação do registro
             novo = Registro.objects.create(
                 nome=nome,
                 email=email,
@@ -2897,9 +2910,9 @@ def cadastro_usuario_view(request):
                 matematica=0,
                 ciencias=0,
 
-                # ✅ Novos campos corretamente nomeados
+                # ✅ Campo único de turno
                 deseja_participar_aulao=deseja_participar_aulao,
-                turnos_aulao=turnos_aulao,
+                turnos_aulao=turno_aulao,
             )
 
             request.session['candidato_id'] = novo.id
@@ -2911,6 +2924,8 @@ def cadastro_usuario_view(request):
 
     disciplinas = Disciplina.objects.filter(ativo=True).order_by('nome')
     return render(request, 'cadastro_usuario.html', {'disciplinas': disciplinas})
+
+
 
 
 

@@ -217,14 +217,30 @@ urlpatterns = [
     path('gerar-atestado/<int:registro_id>/', views.gerar_atestado_view, name='gerar_atestado'),
 
     path('relatorios_eja/', views.relatorio_view, name='relatorios_eja'),
-
     path(
-        'reset/<uidb64>/<token>/',
-        auth_views.PasswordResetConfirmView.as_view(template_name='admin_password_reset_confirm.html'),
-        name='password_reset_confirm'
-    ),
+            'recuperar-senha/',
+            auth_views.PasswordResetView.as_view(
+                template_name='admin_password_reset.html',
+                email_template_name='admin_password_reset_email.html',
+                subject_template_name='admin_password_reset_subject.txt',
+                success_url=reverse_lazy('password_reset_done')
+            ),
+            name='password_reset'
+        ),
 
+        path(
+            'recuperar-senha/enviado/',
+            auth_views.PasswordResetDoneView.as_view(
+                template_name='password_reset_done.html'
+            ),
+            name='password_reset_done'
+        ),
 
+        path(
+            'reset/<uidb64>/<token>/',
+            CustomPasswordResetConfirmView.as_view(),
+            name='password_reset_confirm'
+        ),
 
 
 
