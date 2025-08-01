@@ -25,7 +25,7 @@ VENV/
 # ============================
 # Arquivos sensíveis
 # ============================
-.env
+# .env
 *.secret
 secrets.json
 
