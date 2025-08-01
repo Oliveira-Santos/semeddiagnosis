@@ -137,3 +137,8 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "shelton.oliveira.barbosa@gmail.com"  # Substitua pelo seu e-mail
 EMAIL_HOST_PASSWORD = "nhiq aagp vxvx fzlo"  # Use a senha de aplicativo do Gmail
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+
+# sistema de Gerenciamento das inscrições do Eja 2025
