@@ -2,15 +2,17 @@ from pathlib import Path
 from decouple import config, Csv
 
 
+# ...
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '10.19.35.56',
+    'localhost',
+    'eja.semedcanaadoscarajas.pa.gov.br',
+    '18.230.92.238',
+]
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -130,13 +132,13 @@ LOGIN_REDIRECT_URL = '/dashboard/'  # Substitua pelo caminho correto da sua dash
 
 
 
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = "shelton.oliveira.barbosa@gmail.com"  
-# EMAIL_HOST_PASSWORD = "nhiq aagp vxvx fzlo"  
-# DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "shelton.oliveira.barbosa@gmail.com"  
+EMAIL_HOST_PASSWORD = "nhiq aagp vxvx fzlo"  
+DEFAULT_FROM_EMAIL = "seprot@semedcanaadoscarajas.pa.gov.br" 
 
 
 

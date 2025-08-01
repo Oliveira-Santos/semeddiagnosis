@@ -218,6 +218,12 @@ urlpatterns = [
 
     path('relatorios_eja/', views.relatorio_view, name='relatorios_eja'),
 
+    path(
+        'reset/<uidb64>/<token>/',
+        auth_views.PasswordResetConfirmView.as_view(template_name='admin_password_reset_confirm.html'),
+        name='password_reset_confirm'
+    ),
+
 
 
 
