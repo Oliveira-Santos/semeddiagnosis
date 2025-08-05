@@ -164,13 +164,20 @@
                                 {% for registro in registros %}
                                 <tr>
                                     <td>{{ registro.id }}</td>
-                                    <td>{{ registro.nome }}</td>
+                                    <td>{{ registro.nome|upper }}</td>
                                     <td>{{ registro.cpf }}</td>
                                     <td>
-                                        {% if registro.status == 'parcial' %}<span class="badge bg-success">Aprovado Parcialmente</span>{% endif %}
-                                        {% if registro.status == 'reprovado' %}<span class="badge bg-danger">Reprovado</span>{% endif %}
-                                        {% if registro.status == 'concluinte' %}<span class="badge bg-primary">Concluinte</span>{% endif %}
+                                        {% if registro.status == 'parcial' %}
+                                            <span class="badge bg-success">Aprovado Parcialmente</span>
+                                        {% elif registro.status == 'reprovado' %}
+                                            <span class="badge bg-danger">Reprovado</span>
+                                        {% elif registro.status == 'concluinte' %}
+                                            <span class="badge bg-primary">Concluinte</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">SEM NOTAS</span>
+                                        {% endif %}
                                     </td>
+
                                     <td>
                                         {% if registro.reinscrito %}
                                             <span class="badge bg-success text-white">Sim</span>

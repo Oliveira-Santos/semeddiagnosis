@@ -1966,6 +1966,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     toggleAno();  // executa ao carregar
 });
+
+// CADASTRO VIA AJAX
+$(document).ready(function () {
+    $('#cadastroForm').submit(function(e){
+        e.preventDefault();
+        var form = $(this);
+
+        $.ajax({
+            url: form.attr('action'),  // já está definido no form
+            type: 'POST',
+            data: form.serialize(),
+            success: function(data){
+                // O backend precisa retornar JSON!
+                if (data.status === 'erro') {
+                    // Exibe seu modal de CPF já existe
+                    $('#cpfExisteModal').modal('show');
+                } else if (data.status === 'ok') {
+                    // Redireciona para painel do candidato
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert("Erro inesperado no cadastro!");
+                }
+            },
+            error: function(xhr){
+                alert('Erro ao cadastrar! Tente novamente.');
+            }
+        });
+    });
+});
+
 </script>
 
 

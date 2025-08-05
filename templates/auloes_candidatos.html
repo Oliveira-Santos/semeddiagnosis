@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <h2 class="mb-3 text-center fw-bold" style="letter-spacing:1px;">
+    <i class="fas fa-chalkboard-teacher"></i> AULÕES - CANDIDATOS INSCRITOS
+</h2>
+
+    <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card border-success shadow h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-2x mb-2 text-success"></i>
+                <h5 class="card-title">Total Inscritos</h5>
+                <h2 class="fw-bold text-success">{{ total }}</h2>
+                <p class="card-text mb-0">Candidatos nos Aulões</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-primary shadow h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-sun fa-2x mb-2 text-primary"></i>
+                <h5 class="card-title">Matutino</h5>
+                <h2 class="fw-bold text-primary">{{ turnos.Matutino }}</h2>
+                <p class="card-text mb-0">Inscritos para este turno</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-warning shadow h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-cloud-sun fa-2x mb-2 text-warning"></i>
+                <h5 class="card-title">Vespertino</h5>
+                <h2 class="fw-bold text-warning">{{ turnos.Vespertino }}</h2>
+                <p class="card-text mb-0">Inscritos para este turno</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-dark shadow h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-moon fa-2x mb-2 text-dark"></i>
+                <h5 class="card-title">Noturno</h5>
+                <h2 class="fw-bold text-dark">{{ turnos.Noturno }}</h2>
+                <p class="card-text mb-0">Inscritos para este turno</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="text-end mb-3">
+    <button class="btn btn-danger" onclick="exportarTabelaPDF()">
+        <i class="fas fa-file-pdf"></i> Exportar para PDF
+    </button>
+</div> -->
+
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label for="filtroTurno" class="fw-bold me-2"><i class="fas fa-filter"></i> Filtrar por Turno:</label>
+        <select id="filtroTurno" class="form-control d-inline w-auto" onchange="filtrarTabelaTurno()">
+            <option value="Todos">Todos</option>
+            <option value="Matutino">Matutino</option>
+            <option value="Vespertino">Vespertino</option>
+            <option value="Noturno">Noturno</option>
+        </select>
+    </div>
+    <div class="col-md-6 text-end">
+        <button class="btn btn-danger" onclick="exportarTabelaPDF()">
+            <i class="fas fa-file-pdf"></i> Exportar PDF
+        </button>
+    </div>
+</div>
+
+
+
+
+    {% if candidatos %}
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover w-100 align-middle">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>#</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Turnos Escolhidos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in candidatos %}
+            <tr>
+                <td class="text-center">{{ forloop.counter }}</td>
+                <td>{{ c.nome|upper }}</td>
+                <td>{{ c.cpf }}</td>
+                <td>{{ c.email }}</td>
+                <td>{{ c.telefone }}</td>
+                <td class="text-center turnos-celula">
+                    {% if c.turnos_lista %}
+                        {% for turno in c.turnos_lista %}
+                            {% if turno == 'Matutino' %}
+                                <span class="badge bg-primary turno-badge">{{ turno|upper }}</span>
+                            {% elif turno == 'Vespertino' %}
+                                <span class="badge bg-warning text-dark turno-badge">{{ turno|upper }}</span>
+                            {% elif turno == 'Noturno' %}
+                                <span class="badge bg-dark turno-badge">{{ turno|upper }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary turno-badge">{{ turno|upper }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span class="badge bg-secondary">-</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    {% else %}
+        <div class="alert alert-info">Nenhum candidato inscrito para os aulões até o momento.</div>
+    {% endif %}
+</div>
+
+
+
+<!-- jsPDF e html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+function exportarTabelaPDF() {
+    // Cria um clone só das linhas visíveis
+    var tabelaOriginal = document.querySelector('.table-responsive');
+    var tabelaClone = tabelaOriginal.cloneNode(true);
+
+    // Remove as linhas invisíveis do clone
+    var linhas = tabelaClone.querySelectorAll("tbody tr");
+    linhas.forEach(function(tr) {
+        if (tr.style.display === "none") {
+            tr.remove();
+        }
+    });
+
+    // Cria um div temporário invisível para capturar com html2canvas
+    var tempDiv = document.createElement("div");
+    tempDiv.style.position = "fixed";
+    tempDiv.style.left = "-10000px";
+    tempDiv.appendChild(tabelaClone);
+    document.body.appendChild(tempDiv);
+
+    html2canvas(tabelaClone).then(function(canvas) {
+        var imgData = canvas.toDataURL('image/png');
+        var pdf = new window.jspdf.jsPDF('l', 'mm', 'a4');
+        var imgProps= pdf.getImageProperties(imgData);
+        var pdfWidth = pdf.internal.pageSize.getWidth();
+        var pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 10, pdfWidth, pdfHeight);
+        pdf.save("auloes_candidatos.pdf");
+        document.body.removeChild(tempDiv);
+    });
+}
+</script>
+
+
+
+<script>
+function filtrarTabelaTurno() {
+    var filtro = document.getElementById('filtroTurno').value;
+    var linhas = document.querySelectorAll("tbody tr");
+    linhas.forEach(function(tr) {
+        // Pega todos os badges dessa linha
+        var badges = tr.querySelectorAll(".turnos-celula .badge");
+        var temTurno = false;
+        badges.forEach(function(badge) {
+            var texto = badge.textContent.trim().toUpperCase();
+            if (filtro === "Todos" || texto === filtro.toUpperCase()) {
+                temTurno = true;
+            }
+        });
+        tr.style.display = temTurno ? "" : "none";
+    });
+}
+</script>
+
+
+{% endblock %}

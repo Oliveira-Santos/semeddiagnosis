@@ -242,13 +242,7 @@ urlpatterns = [
             name='password_reset_confirm'
         ),
 
-
-
-
-
-
-
-
+        path('auloes-candidatos/', views.auloes_candidatos, name='auloes_candidatos'),
 
 
 

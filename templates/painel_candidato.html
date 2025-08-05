@@ -237,15 +237,15 @@
     <i class="fas fa-edit fa-lg"></i> Editar Cadastro
   </a>
 
+{% if mostrar_reinscricao %}
+    <a href="#" class="btn btn-danger"
+       onclick="abrirModalReinscricao()" data-bs-toggle="modal" data-bs-target="#cadastroModal">
+       <i class="fas fa-undo"></i> Reinscrever-se nas Pendentes
+    </a>
+{% endif %}
 
-  {% if mostrar_reinscricao and not candidato.reinscrito %}
-  <a href="#" class="btn btn-danger"
-     onclick="abrirModalReinscricao()" 
-     data-bs-toggle="modal" 
-     data-bs-target="#cadastroModal">
-     <i class="fas fa-undo"></i> Reinscrever-se nas Pendentes
-  </a>
-  {% endif %}
+
+
 </div>
   </div>
 

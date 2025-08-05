@@ -72,6 +72,7 @@
                         <i class="nav-icon fas fa-graduation-cap"></i>
                         <p>EJA <i class="right fas fa-angle-left"></i></p>
                     </a>
+                    
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{% url 'upload_exame' %}" class="nav-link">
@@ -79,6 +80,8 @@
                                 <p>Upload de Arquivo</p>
                             </a>
                         </li>
+                        
+                        
                         <li class="nav-item">
                             <a href="{% url 'gestao_arquivos' %}" class="nav-link">
                                 <i class="nav-icon fas fa-book"></i>
@@ -97,6 +100,14 @@
                             <a href="{% url 'relatorios_eja' %}" class="nav-link">
                                 <i class="nav-icon fas fa-chart-bar"></i>
                                 <p>Relatórios</p>
+                            </a>
+                        </li>
+
+                        <!-- Aulões Candidatos -->
+                        <li class="nav-item">
+                            <a href="{% url 'auloes_candidatos' %}" class="nav-link">
+                                <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                <p>Aulões Candidatos</p>
                             </a>
                         </li>
 

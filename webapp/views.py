@@ -2790,15 +2790,21 @@ def formulario_inscricao(request):
 
 ################################################################################################################################################
 
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
+from django.db import IntegrityError
 from .models import Registro, Disciplina, Bairro
 from .utils import gerar_numero_unico  # ajuste se necessário
 
-@csrf_exempt  # ⚠️ Somente em desenvolvimento
+@csrf_exempt  # Só use assim em desenvolvimento!
 def cadastro_usuario_view(request):
+    def is_ajax(request):
+        # Funciona para JQuery AJAX e fetch com X-Requested-With
+        return request.headers.get('x-requested-with') == 'XMLHttpRequest'
+
     if request.method == 'POST':
         try:
             nome = request.POST.get('nome_completo')
@@ -2811,25 +2817,27 @@ def cadastro_usuario_view(request):
             cpf_responsavel = request.POST.get('cpf_responsavel')
             rg_responsavel = request.POST.get('rg_responsavel')
             tipo_responsavel = request.POST.get('tipo_responsavel')
-
             telefone = request.POST.get('telefone')
             telefone_2 = request.POST.get('telefone_2')
             cidade = request.POST.get('cidade')
             endereco = request.POST.get('endereco')
 
-            # Bairro (FK)
             bairro_id = request.POST.get('bairro')
-            try:
-                bairro_instance = Bairro.objects.get(id=bairro_id) if bairro_id else None
-            except Bairro.DoesNotExist:
-                bairro_instance = None
+            bairro_instance = None
+            if bairro_id:
+                try:
+                    bairro_instance = Bairro.objects.get(id=bairro_id)
+                except Bairro.DoesNotExist:
+                    bairro_instance = None
 
             fez_exame_supletivo = request.POST.get('fez_exame_supletivo') == 'Sim'
             ano_ultima_prova_raw = request.POST.get('ano_ultima_prova')
-
             if fez_exame_supletivo:
                 if not ano_ultima_prova_raw or not ano_ultima_prova_raw.isdigit():
-                    messages.error(request, "Você informou que já fez o exame supletivo, mas não preencheu o ano da última prova.")
+                    msg = "Você informou que já fez o exame supletivo, mas não preencheu o ano da última prova."
+                    if is_ajax(request):
+                        return JsonResponse({'status': 'erro', 'msg': msg})
+                    messages.error(request, msg)
                     return redirect('cadastro_usuario')
                 else:
                     ano_ultima_prova = int(ano_ultima_prova_raw)
@@ -2852,74 +2860,71 @@ def cadastro_usuario_view(request):
             escola_2024 = request.POST.get('escola_2024')
             termos_condicoes = request.POST.get('termos_condicoes') == 'on'
 
-            # ✅ Coleta e validação do campo de aulão
             deseja_participar_aulao = request.POST.get('deseja_participar_aulao', 'Não')
             turno_aulao = request.POST.get('turnos_aulao') if deseja_participar_aulao == 'Sim' else ''
 
             VALIDOS_TURNOS = ['Matutino', 'Vespertino', 'Noturno']
             if deseja_participar_aulao == 'Sim':
                 if not turno_aulao:
-                    messages.error(request, "Você marcou que deseja participar dos aulões, mas não selecionou o turno desejado.")
+                    msg = "Você marcou que deseja participar dos aulões, mas não selecionou o turno desejado."
+                    if is_ajax(request):
+                        return JsonResponse({'status': 'erro', 'msg': msg})
+                    messages.error(request, msg)
                     return redirect('cadastro_usuario')
                 elif turno_aulao not in VALIDOS_TURNOS:
-                    messages.error(request, "Turno de aulão inválido selecionado.")
+                    msg = "Turno de aulão inválido selecionado."
+                    if is_ajax(request):
+                        return JsonResponse({'status': 'erro', 'msg': msg})
+                    messages.error(request, msg)
                     return redirect('cadastro_usuario')
 
-            # Campos padrão
+            # Checagem de CPF já cadastrado
+            if Registro.objects.filter(cpf=cpf).exists():
+                msg = "Já existe um cadastro com este CPF."
+                if is_ajax(request):
+                    return JsonResponse({'status': 'erro', 'msg': msg})
+                messages.error(request, msg)
+                return render(request, 'cadastro_usuario.html', {'disciplinas': Disciplina.objects.filter(ativo=True).order_by('nome')})
+
             ano_exame = 2025
             numero = gerar_numero_unico()
 
-            novo = Registro.objects.create(
-                nome=nome,
-                email=email,
-                cpf=cpf,
-                data_nascimento=data_nascimento,
-                maior_de_18=maior_de_18,
-                nome_responsavel=nome_responsavel,
-                cpf_responsavel=cpf_responsavel,
-                rg_responsavel=rg_responsavel,
-                tipo_responsavel=tipo_responsavel,
-                telefone=telefone,
-                telefone_2=telefone_2,
-                cidade=cidade,
-                endereco=endereco,
-                bairro=bairro_instance,
-                fez_exame_supletivo=fez_exame_supletivo,
-                ano_ultima_prova=ano_ultima_prova,
-                prova_todas_disciplinas=prova_todas_disciplinas,
-                disciplinas=disciplinas,
-                possui_necessidade_especial=possui_necessidade_especial,
-                necessidade_especial_detalhe=necessidade_especial_detalhe,
-                senha=senha,
-                local_prova=local_prova,
-                escola_2024=escola_2024,
-                termos_condicoes=termos_condicoes,
-                ano_exame=ano_exame,
-                numero=numero,
-                status="Inscrito",
-
-                # Zerar notas
-                portugues=0,
-                redacao=0,
-                media_ling=0,
-                ingles=0,
-                arte=0,
-                ed_fisica=0,
-                historia=0,
-                geografia=0,
-                matematica=0,
-                ciencias=0,
-
-                # ✅ Campo único de turno
-                deseja_participar_aulao=deseja_participar_aulao,
-                turnos_aulao=turno_aulao,
-            )
+            try:
+                novo = Registro.objects.create(
+                    nome=nome, email=email, cpf=cpf,
+                    data_nascimento=data_nascimento, maior_de_18=maior_de_18,
+                    nome_responsavel=nome_responsavel, cpf_responsavel=cpf_responsavel,
+                    rg_responsavel=rg_responsavel, tipo_responsavel=tipo_responsavel,
+                    telefone=telefone, telefone_2=telefone_2,
+                    cidade=cidade, endereco=endereco, bairro=bairro_instance,
+                    fez_exame_supletivo=fez_exame_supletivo, ano_ultima_prova=ano_ultima_prova,
+                    prova_todas_disciplinas=prova_todas_disciplinas, disciplinas=disciplinas,
+                    possui_necessidade_especial=possui_necessidade_especial,
+                    necessidade_especial_detalhe=necessidade_especial_detalhe,
+                    senha=senha, local_prova=local_prova, escola_2024=escola_2024,
+                    termos_condicoes=termos_condicoes, ano_exame=ano_exame, numero=numero,
+                    status="Inscrito",
+                    portugues=0, redacao=0, media_ling=0, ingles=0, arte=0, ed_fisica=0,
+                    historia=0, geografia=0, matematica=0, ciencias=0,
+                    deseja_participar_aulao=deseja_participar_aulao, turnos_aulao=turno_aulao,
+                )
+            except IntegrityError:
+                msg = "Erro: Este CPF já foi utilizado em outro cadastro."
+                if is_ajax(request):
+                    return JsonResponse({'status': 'erro', 'msg': msg})
+                messages.error(request, msg)
+                return redirect('cadastro_usuario')
 
             request.session['candidato_id'] = novo.id
+            if is_ajax(request):
+                return JsonResponse({'status': 'ok', 'redirect_url': '/painel-candidato/'})
             return redirect('painel_candidato')
 
         except Exception as e:
-            messages.error(request, f"Erro no cadastro: {str(e)}")
+            msg = f"Erro no cadastro: {str(e)}"
+            if is_ajax(request):
+                return JsonResponse({'status': 'erro', 'msg': msg})
+            messages.error(request, msg)
             return redirect('cadastro_usuario')
 
     disciplinas = Disciplina.objects.filter(ativo=True).order_by('nome')
@@ -2932,19 +2937,28 @@ def cadastro_usuario_view(request):
 ################################################################################################################################################
 
 import re
-from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseBadRequest, Http404
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Registro
+from .utils import gerar_numero_unico  # Função que você deve ter para gerar número único
 
 def reinscricao_usuario(request, cpf):
     # Validação básica do CPF: deve ter exatamente 11 dígitos numéricos
     if not re.match(r'^\d{11}$', cpf):
         return HttpResponseBadRequest("CPF inválido")
 
-    # Busca segura do candidato com ano_exame fixo (2024)
-    candidato = get_object_or_404(Registro, cpf=cpf, ano_exame=2024)
+    # Busca todos os registros do candidato para 2024
+    candidatos = Registro.objects.filter(cpf=cpf, ano_exame=2024).order_by('-id')
+    candidato = candidatos.first()
+    if not candidato:
+        raise Http404("Candidato não encontrado.")
 
-    # Verifica disciplinas com nota < 7
+    # Alerta caso haja duplicidade
+    if candidatos.count() > 1:
+        messages.warning(request, "Atenção: existe mais de uma inscrição com esse CPF para 2024. Mostrando a mais recente.")
+
+    # Disciplinas reprovadas (<7)
     disciplinas_aprovadas = {
         "portugues": candidato.portugues,
         "redacao": candidato.redacao,
@@ -2957,17 +2971,89 @@ def reinscricao_usuario(request, cpf):
         "matematica": candidato.matematica,
         "ciencias": candidato.ciencias,
     }
-
     disciplinas_reprovadas = [
         nome.capitalize().replace("_", " ")
         for nome, nota in disciplinas_aprovadas.items()
         if nota is not None and nota < 7.0
     ]
 
+    if request.method == 'POST':
+        try:
+            # Gera novo número único para a reinscrição
+            novo_numero = gerar_numero_unico()
+
+            # Cria o novo registro de reinscrição, copiando todos os campos relevantes
+            novo_registro = Registro.objects.create(
+                ano_exame=2025,  # Ano da reinscrição
+                numero=novo_numero,
+                nome=candidato.nome,
+                cpf=candidato.cpf,
+                portugues=0,
+                redacao=0,
+                media_ling=0,
+                ingles=0,
+                arte=0,
+                ed_fisica=0,
+                historia=0,
+                geografia=0,
+                matematica=0,
+                ciencias=0,
+                observacao='',
+                status='Inscrito',
+                materias_aprovadas='',
+                certificado_emitido=False,
+                certificado_data_emissao=None,
+                certificado_numero='',
+                atestado_emitido=False,
+                atestado_data_emissao=None,
+                atestado_numero='',
+                email=candidato.email,
+                data_nascimento=candidato.data_nascimento,
+                maior_de_18=candidato.maior_de_18,
+                nome_responsavel=candidato.nome_responsavel,
+                cpf_responsavel=candidato.cpf_responsavel,
+                rg_responsavel=candidato.rg_responsavel,
+                tipo_responsavel=candidato.tipo_responsavel,
+                telefone=candidato.telefone,
+                telefone_2=candidato.telefone_2,
+                cidade=candidato.cidade,
+                endereco=candidato.endereco,
+                bairro=candidato.bairro,
+                fez_exame_supletivo=candidato.fez_exame_supletivo,
+                ano_ultima_prova=None,  # ou 0, conforme sua lógica
+                prova_todas_disciplinas=candidato.prova_todas_disciplinas,
+                disciplinas=', '.join(disciplinas_reprovadas),  # Só reinscreve nas reprovadas!
+                possui_necessidade_especial=candidato.possui_necessidade_especial,
+                necessidade_especial_detalhe=candidato.necessidade_especial_detalhe,
+                senha=candidato.senha,
+                local_prova=candidato.local_prova,
+                escola_2024=candidato.escola_2024,
+                termos_condicoes=True,
+                reinscricao=True,
+                reinscrito=False,
+                deseja_participar_aulao=candidato.deseja_participar_aulao,
+                turnos_aulao=candidato.turnos_aulao,
+                # Os campos token e datas podem ser deixados default (None)
+            )
+
+            # Marca o registro antigo como reinscrito
+            candidato.reinscrito = True
+            candidato.save(update_fields=['reinscrito'])
+
+            messages.success(request, "Reinscrição realizada com sucesso!")
+            # Opcional: salvar o novo id na sessão para login automático
+            request.session['candidato_id'] = novo_registro.id
+            return redirect('painel_candidato')  # ajuste se necessário
+        except Exception as e:
+            messages.error(request, f"Ocorreu um erro ao realizar a reinscrição: {e}")
+
     return render(request, 'webapp/reinscricao_form.html', {
         'candidato': candidato,
         'disciplinas_reprovadas': disciplinas_reprovadas,
     })
+
+
+
 
 ################################################################################################################################################
 
@@ -3104,6 +3190,8 @@ def login_candidato(request):
 
 ################################################################################################################################################
 
+# ... imports iguais
+
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Registro, Disciplina
 
@@ -3115,30 +3203,28 @@ def painel_candidato(request):
     candidato_base = get_object_or_404(Registro, id=candidato_id)
     cpf = candidato_base.cpf
 
-    anos_disponiveis = (
-        Registro.objects.filter(cpf=cpf)
-        .values_list('ano_exame', flat=True)
-        .distinct()
-        .order_by('-ano_exame')
+    anos_disponiveis = sorted(
+        set(int(a) for a in Registro.objects.filter(cpf=cpf).values_list('ano_exame', flat=True)),
+        reverse=True
     )
 
     ano_selecionado = request.GET.get('ano')
     if not ano_selecionado:
         ano_selecionado = str(candidato_base.ano_exame)
+    ano_selecionado_int = int(ano_selecionado)
 
-    candidato = get_object_or_404(Registro, cpf=cpf, ano_exame=ano_selecionado)
+    candidato_qs = Registro.objects.filter(cpf=cpf, ano_exame=ano_selecionado_int).order_by('-id')
+    candidato = candidato_qs.first()
+    if not candidato:
+        return redirect('login_candidato')
 
-    registros_anteriores = (
-        Registro.objects
-        .filter(cpf=candidato.cpf, ano_exame__lt=candidato.ano_exame)
-        .exclude(id=candidato.id)
+    # Apenas para 2024 (ou ano que você desejar)
+    mostrar_reinscricao = (
+        ano_selecionado_int == 2024 and
+        int(getattr(candidato, 'reinscricao', 0)) == 1 and
+        int(getattr(candidato, 'reinscrito', 0)) == 0 and
+        not Registro.objects.filter(cpf=cpf, ano_exame=2025).exists()
     )
-    registro_anterior = registros_anteriores.order_by('-ano_exame').first()
-
-    if not registro_anterior and candidato.reinscricao:
-        registro_anterior = candidato
-
-    realizou_prova_2024 = registro_anterior is not None
 
     disciplinas = {
         "Português": candidato.portugues,
@@ -3150,17 +3236,9 @@ def painel_candidato(request):
         "Geografia": candidato.geografia,
         "Inglês": candidato.ingles,
     }
-
     media_aprovacao = 7.0
-
-    disciplinas_aprovadas = {
-        nome: nota for nome, nota in disciplinas.items()
-        if nota is not None and nota >= media_aprovacao
-    }
-    disciplinas_pendentes = {
-        nome: nota for nome, nota in disciplinas.items()
-        if nota is None or nota < media_aprovacao
-    }
+    disciplinas_aprovadas = {nome: nota for nome, nota in disciplinas.items() if nota is not None and nota >= media_aprovacao}
+    disciplinas_pendentes = {nome: nota for nome, nota in disciplinas.items() if nota is None or nota < media_aprovacao}
 
     disciplinas_lista = []
     if candidato.disciplinas:
@@ -3177,63 +3255,10 @@ def painel_candidato(request):
     else:
         status_final = "Reprovado"
 
-    status_anterior = None
-    if registro_anterior:
-        disciplinas_antigas = {
-            "Português": registro_anterior.portugues,
-            "Matemática": registro_anterior.matematica,
-            "Ciências": registro_anterior.ciencias,
-            "Arte": registro_anterior.arte,
-            "Educação Física": registro_anterior.ed_fisica,
-            "História": registro_anterior.historia,
-            "Geografia": registro_anterior.geografia,
-            "Inglês": registro_anterior.ingles,
-        }
-
-        aprovadas_antigas = sum(1 for nota in disciplinas_antigas.values() if nota is not None and nota >= media_aprovacao)
-        total_antigas = len(disciplinas_antigas)
-
-        status_anterior = (
-            "Aprovado" if aprovadas_antigas == total_antigas else
-            "Parcial" if aprovadas_antigas > 0 else
-            "Reprovado"
-        )
-
-    mostrar_reinscricao = False
-    mostrar_botao_impressao = False  # valor padrão seguro
-
-    try:
-        ano_atual = int(candidato.ano_exame)
-    except (TypeError, ValueError):
-        ano_atual = None
-
-    if registro_anterior and ano_atual:
-        notas_anteriores = [
-            registro_anterior.portugues,
-            registro_anterior.matematica,
-            registro_anterior.ciencias,
-            registro_anterior.arte,
-            registro_anterior.ed_fisica,
-            registro_anterior.historia,
-            registro_anterior.geografia,
-            registro_anterior.ingles,
-        ]
-
-        aprovadas = [n for n in notas_anteriores if n is not None and n >= 7.0]
-        reprovadas = [n for n in notas_anteriores if n is not None and n < 7.0]
-
-        if reprovadas and not registro_anterior.reinscrito:
-            mostrar_reinscricao = True
-
-    # Mostrar botão de impressão apenas se:
-    # - for reinscrito no ano atual
-    # - ou se não for reinscrição
-    if not candidato.reinscricao or str(candidato.ano_exame) == str(ano_atual):
-        mostrar_botao_impressao = True
+    mostrar_botao_impressao = True
 
     context = {
         'candidato': candidato,
-        'registro_anterior': registro_anterior,
         'disciplinas_aprovadas': disciplinas_aprovadas,
         'disciplinas_pendentes': disciplinas_pendentes,
         'disciplinas_lista': disciplinas_lista,
@@ -3244,10 +3269,11 @@ def painel_candidato(request):
         'disciplinas': disciplinas,
         'status_final': status_final,
         'mostrar_reinscricao': mostrar_reinscricao,
-        'realizou_prova_2024': realizou_prova_2024,
+        'realizou_prova_2024': False,
         'disciplinas_pendentes_nomes': list(disciplinas_pendentes.keys()),
         'anos_disponiveis': anos_disponiveis,
         'ano_selecionado': ano_selecionado,
+        'ano_selecionado_int': ano_selecionado_int,
         'mostrar_botao_impressao': mostrar_botao_impressao,
     }
 
@@ -3704,9 +3730,11 @@ def reinscrever_usuario(request):
 
     candidato_anterior = get_object_or_404(Registro, id=candidato_id)
 
-    # Marca o registro anterior como reinscrito
-    candidato_anterior.reinscrito = True
-    candidato_anterior.save()
+    # --- Marcar TODOS registros do CPF daquele ano anterior como reinscrito! (evita duplicidade do botão)
+    Registro.objects.filter(
+        cpf=candidato_anterior.cpf, 
+        ano_exame=candidato_anterior.ano_exame
+    ).update(reinscrito=True)
 
     # Trata o campo bairro com segurança
     bairro = None
@@ -3732,7 +3760,6 @@ def reinscrever_usuario(request):
     # Coleta das disciplinas (apenas se a opção for "Não")
     disciplinas = ",".join(request.POST.getlist('disciplinas[]'))
 
-
     # Aulões
     deseja_participar_aulao = request.POST.get('deseja_participar_aulao') or "Não"
     turnos_aulao = ",".join(request.POST.getlist('turnos_aulao[]')) if deseja_participar_aulao == "Sim" else ""
@@ -3752,7 +3779,7 @@ def reinscrever_usuario(request):
         local_prova=request.POST.get('local_prova'),
         fez_exame_supletivo=request.POST.get('fez_exame_supletivo') or "Não",
         ano_ultima_prova=request.POST.get('ano_ultima_prova') or None,
-        possui_necessidade_especial=request.POST.get('possui_necessidade_especial') == 'Sim',
+        possui_necessidade_especial="Sim" if request.POST.get('possui_necessidade_especial') == 'Sim' else "Não",
         necessidade_especial_detalhe=request.POST.get('necessidade_especial_detalhe'),
         prova_todas_disciplinas=prova_todas,
         disciplinas=disciplinas,
@@ -3770,16 +3797,15 @@ def reinscrever_usuario(request):
         status="Reinscrito",
     )
 
-    # Copia as notas >= 7.0
-    # campos_disciplinas = [
-    #     'portugues', 'arte', 'ciencias', 'ed_fisica',
-    #     'geografia', 'historia', 'ingles', 'matematica',
-    #     'media_ling'
-    # ]
-    # for campo in campos_disciplinas:
-    #     nota = getattr(candidato_anterior, campo)
-    #     if nota is not None and nota >= 7.0:
-    #         setattr(novo, campo, nota)
+    # Se quiser copiar as notas aprovadas do registro anterior para o novo, use:
+    campos_disciplinas = [
+        'portugues', 'arte', 'ciencias', 'ed_fisica',
+        'geografia', 'historia', 'ingles', 'matematica', 'media_ling', 'redacao'
+    ]
+    for campo in campos_disciplinas:
+        nota = getattr(candidato_anterior, campo, None)
+        if nota is not None and nota >= 7.0:
+            setattr(novo, campo, nota)
 
     novo.save()
     request.session['candidato_id'] = novo.id
@@ -4247,4 +4273,29 @@ def relatorio_view(request):
     }
 
     return render(request, 'webapp/relatorios_eja.html', context)
+################################################################################################################################################
+
+from django.shortcuts import render
+from .models import Registro
+
+def auloes_candidatos(request):
+    candidatos = Registro.objects.filter(deseja_participar_aulao='Sim').order_by('-id')
+    turnos = {'Matutino': 0, 'Vespertino': 0, 'Noturno': 0}
+    for c in candidatos:
+        c.turnos_lista = [t.strip() for t in (c.turnos_aulao or "").split(",") if t.strip()]
+        if c.turnos_aulao:
+            turnos_str = c.turnos_aulao.split(',')
+            c.turnos_lista = [t.strip() for t in turnos_str]
+            for t in c.turnos_lista:
+                if t in turnos:
+                    turnos[t] += 1
+        else:
+            c.turnos_lista = []
+    return render(request, 'auloes_candidatos.html', {
+        'candidatos': candidatos,
+        'turnos': turnos,
+        'total': candidatos.count()
+    })
+
+
 ################################################################################################################################################
