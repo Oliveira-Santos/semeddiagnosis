@@ -2514,7 +2514,12 @@ def emitir_atestado_view(request, id):
 
 
         # Define o locale para português do Brasil
-        locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+        try:
+            locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+        except locale.Error:
+            # Fallback: usa o locale padrão do sistema
+            locale.setlocale(locale.LC_TIME, '')
+
 
         # Cabeçalho com separação por linhas
         pdf.setFont("Helvetica-Bold", 10)
