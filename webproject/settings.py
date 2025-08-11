@@ -8,9 +8,9 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = [
     "educa.semedcanaadoscarajas.pa.gov.br",
+    "56.124.75.231",
     "127.0.0.1",
     "localhost",
-    "18.231.6.41",
 ]
 
 
