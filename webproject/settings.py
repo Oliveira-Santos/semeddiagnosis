@@ -13,6 +13,31 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
+# Segurança / Proxy (atrás do Nginx)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
+# Domínios que podem enviar cookies/headers de CSRF (exige esquema)
+CSRF_TRUSTED_ORIGINS = [
+    "https://educa.semedcanaadoscarajas.pa.gov.br",
+]
+
+# Em desenvolvimento, evite 403 CSRF no localhost
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += [
+        "http://127.0.0.1:8000",
+        "http://localhost:8000",
+    ]
+
+# (só em produção) reforça HTTPS
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # HSTS (ajuste o tempo depois de testar)
+    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
